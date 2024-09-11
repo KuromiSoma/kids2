@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>ログイン</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/core.css}" />
+  <style type="text/css" th:utext="${pagecss}"></style>
+</head>
+<body>
+  <script th:utext="${pagejs}"></script>
+  <div id="titleArea" th:text="${lblTitle}">キッズコントロール　　ログイン画面</div>
+  <div class="mainDiv">
+  <form action="" method="post" >
+  <div class="loginDiv">
+    <div class="loginMsg" th:if="${form.loginErrorFlg}"><span>IDまたはパスワードが違います。</span></div>
+    <table>
+	  <tr>
+      <td class="id">
+        ID
+	  </td>
+      <td>
+	    <input th:name="loginId" th:id="loginId" type="text" size="12" th:value="${form.loginId}" />
+	  </td>
+      </tr>
+      <tr>
+      <td class="pass">
+        パスワード
+	  </td>
+      <td>
+	    <input th:name="loginPass" th:id="loginPass" type="password" size="12" th:value="${form.loginPass}" />
+	  </td>
+      </tr>
+	</table>
+    <table>
+	  <tr>
+      <td>
+	    <div class="buttonDivL">
+		  <button class="login" type="submit" name="action" value="doCommit" id="doCommit" >
+		    <img class="iconStyle" th:src="@{/images/icon/login.png}" alt="ログイン" />
+		  </button>
+		</div>
+	  </td>
+      </tr>
+	</table>
+  </div>
+</form>
+  </div>
+</body>
+</html>
