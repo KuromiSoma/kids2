@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.web.WebLoginMapper">
+	<select id="selectAdmin" resultType="com.kdc.common.entity.db.AdministratorMasterEntity"
+		parameterType="com.kdc.common.entity.db.AdministratorMasterEntity">
+        SELECT
+            administrator_id                                AS  administratorid,
+            administrator_name                              AS  administratorname,
+            password                                        AS  password
+        FROM
+            administrator_master
+        WHERE
+            administrator_id = #{rec.administratorid}
+        AND password = #{rec.password}
+	</select>
+</mapper>
