@@ -22,7 +22,7 @@ import com.kdc.common.util.KdcCommonUtils;
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class JavaScriptConfirmHolder {
 
-	private ArrayList＜ConfirmItem> confirmList = new ArrayList<>();
+	private ArrayList<ConfirmItem> confirmList = new ArrayList<>();
 
 	private class ConfirmItem {
 		private String buttonId;
