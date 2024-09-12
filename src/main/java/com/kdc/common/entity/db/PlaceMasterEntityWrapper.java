@@ -19,4 +19,19 @@ public class PlaceMasterEntityWrapper {
 		return 0;
 	}
 
+	public Object getPlacename() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public String getIconid() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public Object getPlacetypeflg() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
 }

@@ -26,7 +26,7 @@ public interface PlaceMasterMapper {
 	 * 
 	 * @return 場所マスタクラスリスト
 	 */
-	public List＜PlaceMasterEntityWrapper> selectAll(@Param("delflg") Integer delflg,@Param("groupid") String groupid, @Param("sort") boolean sort);
+	public List<PlaceMasterEntityWrapper> selectAll(@Param("delflg") Integer delflg,@Param("groupid") String groupid, @Param("sort") boolean sort);
 
 	/**
 	 * プライマリキーを指定して取得.

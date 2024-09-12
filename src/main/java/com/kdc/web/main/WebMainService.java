@@ -85,7 +85,7 @@ public class WebMainService {
 		}
 
 		// DBより場所リスト取得
-		List＜PlaceMasterEntityWrapper> placeList = placeMasterMapper.selectAll(CommonConst.FLG_OFF,form.getCurrentGroupId(), true);
+		List<PlaceMasterEntityWrapper> placeList = placeMasterMapper.selectAll(CommonConst.FLG_OFF,form.getCurrentGroupId(), true);
 
 		// 場所リストを表示用隠し項目に設定する
 

@@ -32,10 +32,10 @@ public class WebMainForm extends KdsBaseForm {
 	private String userLineDisp;
 
 	private String userIdList;
-	private List＜WebUserViewEntity> userList;
+	private List<WebUserViewEntity> userList;
 	// 管理レベルコンボボックス
 	private String cmbGroupName;
-	private Map＜String,String> cmbGroup;
+	private Map<String,String> cmbGroup;
 	// 表示中のグループID
 	private String currentGroupId;
 
