@@ -1,4 +1,4 @@
-package com.kdc.web.main;
+package com.kdc.web.webmain;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
