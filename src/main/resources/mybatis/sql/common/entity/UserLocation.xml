@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.UserLocationMapper">
+  <sql id="selectAllColumnsFromUserLocation">
+        SELECT
+            ul.user_id                                         AS  userid,
+            ul.longitude_and_latitude                          AS  longitudeandlatitude,
+            ul.longitude_and_latitude[0]                       AS  latitude,
+            ul.longitude_and_latitude[1]                       AS  longitude,
+            ul.moving_distance                                 AS  movingdistance,
+            ul.battery_level                                   AS  batterylevel,
+            ul.reception_status                                AS  receptionstatus,
+            ul.connection_status                               AS  connectionstatus,
+            ul.last_location_date                              AS  lastlocationdate,
+            ul.del_flg                                         AS  delflg,
+            ul.register_user_id                                AS  registeruserid,
+            ul.register_date                                   AS  registerdate,
+            ul.update_user_id                                  AS  updateuserid,
+            ul.update_date                                     AS  updatedate
+
+        FROM
+            user_location ul
+           ,user_master um
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.UserLocationEntityWrapper">
+    <include refid="selectAllColumnsFromUserLocation"></include>
+    <where>
+    		ul.user_id = um.user_id
+    	AND um.group_id = #{groupid}
+	  <if test='delflg != null'>
+        AND ul.del_flg = #{delflg}
+	  </if>
+	</where>
+    <if test='sort != null'>
+        ORDER BY
+	  <choose>
+	    <when test='sort'>
+            ul.user_id
+		</when>
+        <otherwise>
+            ul.user_id DESC
+		</otherwise>
+	  </choose>
+	</if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.UserLocationEntityWrapper">
+    <include refid="selectAllColumnsFromUserLocation"></include>
+        WHERE
+            ul.user_id = #{userid}
+    	 AND ul.user_id = um.user_id
+	<if test='delflg != null'>
+        AND ul.del_flg = #{delflg}
+	</if>
+  </select>
+
+  <select id="selectByDate" resultType="com.kdc.common.entity.db.UserLocationEntityWrapper">
+    <include refid="selectAllColumnsFromUserLocation"></include>
+        WHERE
+            to_char(ul.last_location_date,'YYYYMMDD') = #{lastLocationDate}
+    	AND ul.user_id = um.user_id
+        AND ul.del_flg = 0
+        ORDER BY
+            ul.user_id ASC,
+            ul.last_location_date ASC
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.UserLocationEntityWrapper">
+        INSERT INTO
+            user_location
+        (
+            user_id,
+            longitude_and_latitude,
+            moving_distance,
+            battery_level,
+            reception_status,
+            connection_status,
+            last_location_date,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.userid},
+            point(#{rec.latitude},#{rec.longitude}),
+            #{rec.movingdistance},
+            #{rec.batterylevel},
+            #{rec.receptionstatus},
+            #{rec.connectionstatus},
+            #{rec.lastlocationdate},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+
+  <update id="update" parameterType="com.kdc.common.entity.db.UserLocationEntityWrapper">
+        UPDATE
+            user_location
+
+        SET
+            longitude_and_latitude = point(#{rec.latitude},#{rec.longitude}),
+            moving_distance = #{rec.movingdistance},
+            battery_level = #{rec.batterylevel},
+            reception_status = #{rec.receptionstatus},
+            connection_status = #{rec.connectionstatus},
+            last_location_date = #{rec.lastlocationdate},
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+
+        WHERE
+            user_id = #{rec.userid}
+        AND del_flg = 0
+  </update>
+</mapper>

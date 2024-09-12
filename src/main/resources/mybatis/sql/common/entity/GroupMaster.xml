@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.GroupMasterMapper">
+  <sql id="selectAllColumnsFromGroupMaster">
+        SELECT
+            group_id                                        AS  groupid,
+            group_name                                      AS  groupname,
+            config_param1                                   AS  configparam1,
+            config_param2                                   AS  configparam2,
+            config_param3                                   AS  configparam3,
+            config_param4                                   AS  configparam4,
+            config_param5                                   AS  configparam5,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            group_master
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.GroupInfoEntity">
+    <include refid="selectAllColumnsFromGroupMaster"></include>
+    <where>
+	  <if test='delflg != null'>
+            del_flg = #{delflg}
+	  </if>
+	</where>
+        ORDER BY
+            TO_NUMBER(group_id,'00000')
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.GroupInfoEntity">
+    <include refid="selectAllColumnsFromGroupMaster"></include>
+        WHERE
+            group_id = #{groupid}
+	<if test='delflg != null'>
+        AND del_flg = #{delflg}
+	</if>
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.GroupInfoEntity">
+        INSERT INTO
+            group_master
+        (
+            group_id,
+            group_name,
+            config_param1,
+            config_param2,
+            config_param3,
+            config_param4,
+            config_param5,
+            del_flg,
+            register_user_id,
+            register_date
+        )
+        VALUES
+        (
+            #{rec.groupid},
+            #{rec.groupname},
+            #{rec.configparam1},
+            #{rec.configparam2},
+            #{rec.configparam3},
+            #{rec.configparam4},
+            #{rec.configparam5},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+
+  <update id="update" parameterType="com.kdc.common.entity.db.GroupInfoEntity">
+        UPDATE
+            group_master
+        SET
+    <if test='rec.groupname != null'>
+            group_name = #{rec.groupname},
+	</if>
+    <if test='rec.configparam1 != null'>
+            config_param1 = #{rec.configparam1},
+	</if>
+    <if test='rec.configparam2 != null'>
+            config_param2 = #{rec.configparam2},
+	</if>
+    <if test='rec.configparam3 != null'>
+            config_param3 = #{rec.configparam3},
+	</if>
+    <if test='rec.configparam4 != null'>
+            config_param4 = #{rec.configparam4},
+	</if>
+    <if test='rec.configparam5 != null'>
+            config_param5 = #{rec.configparam5},
+	</if>
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+        WHERE
+            group_id = #{rec.groupid}
+  </update>
+
+  <insert id="insertSendIntervalConfig" parameterType="com.kdc.common.entity.db.GroupInfoEntity">
+        INSERT INTO
+            send_interval_config
+        (
+            group_id,
+            auth_level,
+            day_of_week,
+            config_no,
+            using_flag,
+            start_time,
+            end_time,
+            transmission_interval,
+            del_flg,
+            register_user_id,
+            register_date
+        )
+        SELECT
+            #{rec.groupid},
+            auth_level,
+            day_of_week,
+            config_no,
+            using_flag,
+            start_time,
+            end_time,
+            transmission_interval,
+            del_flg,
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        FROM
+        	send_interval_config
+        WHERE group_id ='0'
+  </insert>
+
+  <insert id="insertUserAlertConfig" parameterType="com.kdc.common.entity.db.GroupInfoEntity">
+        INSERT INTO
+            user_alert_config
+        (
+            group_id,
+		    auth_level,
+		    notification_auth_level,
+		    location_display_flg,
+		    moving_distance_display_flg,
+		    battery_level_display_flg,
+		    access_time_display_flg,
+		    reception_status_display_flg,
+		    battery_level_alert_flg,
+		    battery_notification,
+		    battery_popup,
+		    battery_alarm_time,
+		    battery_vibration_time,
+		    battery_reference,
+		    connection_alert_flg,
+		    connection_notification,
+		    connection_popup,
+		    connection_alarm_time,
+		    connection_vibration_time,
+		    sos_alert_flg,
+		    sos_notification,
+		    sos_popup,
+		    sos_alarm_time,
+		    sos_vibration_time,
+		    del_flg,
+		    register_user_id,
+		    register_date
+        )
+        SELECT
+            #{rec.groupid},
+            auth_level,
+            notification_auth_level,
+            location_display_flg,
+            moving_distance_display_flg,
+            battery_level_display_flg,
+            access_time_display_flg,
+            reception_status_display_flg,
+            battery_level_alert_flg,
+            battery_notification,
+            battery_popup,
+            battery_alarm_time,
+            battery_vibration_time,
+            battery_reference,
+            connection_alert_flg,
+            connection_notification,
+            connection_popup,
+            connection_alarm_time,
+            connection_vibration_time,
+            sos_alert_flg,
+            sos_notification,
+            sos_popup,
+            sos_alarm_time,
+            sos_vibration_time,
+            del_flg,
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        FROM
+        	user_alert_config
+        WHERE group_id ='0'
+  </insert>
+
+  <insert id="insertConfigMasterg" parameterType="com.kdc.common.entity.db.GroupInfoEntity">
+        INSERT INTO
+            config_master
+        (
+            group_id,
+            config_id,
+            config_code,
+            config_name,
+            config_param1,
+            config_param2,
+            config_param3,
+            config_param4,
+            config_param5,
+            del_flg,
+            register_user_id,
+            register_date
+        )
+        SELECT
+            #{rec.groupid},
+            config_id,
+            config_code,
+            config_name,
+            config_param1,
+            config_param2,
+            config_param3,
+            config_param4,
+            config_param5,
+            del_flg,
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        FROM
+        	config_master
+        WHERE group_id ='0'
+  </insert>
+
+</mapper>

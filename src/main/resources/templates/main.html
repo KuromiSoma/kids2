@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>メイン画面</title>
+  <meta name="viewport" content="initial-scale=1.0" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" th:href="@{/js/jquery-ui-1.11.4.custom/jquery-ui.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/core.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/map.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+  <script src="/js/jquery/jquery-2.2.0.min.js" th:src="@{/js/jquery/jquery-2.2.0.min.js}"></script>
+  <script src="/js/jquery-ui-1.11.4.custom/jquery-ui.min.js" th:src="@{/js/jquery-ui-1.11.4.custom/jquery-ui.min.js}"></script>
+  <script type="text/javascript" th:src="'https://maps.googleapis.com/maps/api/js?key='+__${googleMapApiKey}__+'&libraries=drawing,places,geometry'"></script>
+  <script src="/js/kdc/core.js" th:src="@{/js/kdc/core.js}"></script>
+  <script src="/js/kdc/mainMap.js" th:src="@{/js/kdc/mainMap.js}"></script>
+  <style type="text/css" th:utext="${pagecss}"></style>
+</head>
+<body>
+  <script th:utext="${pagejs}"></script>
+  <div id="map-canvas"></div>
+  <div id="mainArea">
+    <form id="form1" action="" method="post">
+	  <p>
+	    <input type="hidden" th:name="mapLatitude" th:id="mapLatitude" th:value="${form.mapLatitude}" />
+        <input type="hidden" th:name="mapLongitude" th:id="mapLongitude" th:value="${form.mapLongitude}" />
+        <input type="hidden" th:name="mapZoomLevel" th:id="mapZoomLevel" th:value="${form.mapZoomLevel}" />
+        <input type="hidden" th:name="placeNameList" th:id="placeNameList" th:value="${form.placeNameList}"/>
+        <input type="hidden" th:name="placeTypeList" th:id="placeTypeList" th:value="${form.placeTypeList}"/>
+        <input type="hidden" th:name="placeIconIdList" th:id="placeIconIdList" th:value="${form.placeIconIdList}"/>
+        <input type="hidden" th:name="pointList" th:id="pointList" th:value="${form.pointList}"/>
+        <input type="hidden" th:name="radiusList" th:id="radiusList" th:value="${form.radiusList}"/>
+        <input type="hidden" th:name="placeIconDataList" th:id="placeIconDataList" th:value="${form.placeIconDataList}"/>
+        <input type="hidden" th:name="placeTypeColorList" th:id="placeTypeColorList" th:value="${form.placeTypeColorList}"/>
+        <input type="hidden" th:name="markerListAll" th:id="markerListAll" th:value="${form.markerListAll}" />
+        <input type="hidden" th:name="markerListLatest" th:id="markerListLatest" th:value="${form.markerListLatest}" />
+        <input type="hidden" th:name="infoWindowList" th:id="infoWindowList" th:value="${form.infoWindowList}" />
+        <input type="hidden" th:name="userIconList" th:id="userIconList" th:value="${form.userIconList}" />
+        <input type="hidden" th:name="lineColorList" th:id="lineColorList" th:value="${form.lineColorList}" />
+        <input type="hidden" th:name="lineOpacityList" th:id="lineOpacityList" th:value="${form.lineOpacityList}" />
+        <input type="hidden" th:name="markerColorList" th:id="markerColorList" th:value="${form.markerColorList}" />
+        <input type="hidden" th:name="selectUserIndex" th:id="selectUserIndex" th:value="${form.selectUserIndex}" />
+        <input type="hidden" th:name="userLineDisp" th:id="userLineDisp" th:value="${form.userLineDisp}" />
+        <input type="hidden" th:name="userIdList" th:id="userIdList" th:value="${form.userIdList}" />
+	  </p>
+	  <div class="allDispButton">
+	    <button class="allDispButton" type="button" onclick="allMarkerAndLineDisp()">
+		  <img class="iconStyle" src="" th:src="@{/images/icon/homelogo.png}" alt="ホーム" width="64" height="64" />
+		</button>
+	  </div>
+      <div class="userSelect">
+		  <select class="iconStyle2" style="font-size:20px;font-weight: bold;" th:field="${form.cmbGroupName}"  >
+		  	  <option th:each="item:${form.cmbGroup}" th:value="${item.key}" th:if="${item.key==form.currentGroupId}" th:selected="selected"  th:text="${item.value}"></option>
+			  <option th:each="item:${form.cmbGroup}" th:value="${item.key}" th:if="${item.key!=form.currentGroupId}" th:text="${item.value}"></option>
+		  </select>
+          <input type="hidden" th:name="currentGroupId" th:id="currentGroupId" th:value="${form.currentGroupId}" />
+	  </div>
+      <div class="buttonSet">
+	    <button class="mainButton" type="button" onclick="authConfigOpen()">
+		  <img class="iconStyle" src="" th:src="@{/images/icon/config.png}" alt="管理設定" width="64" height="64" />
+		</button>
+        <button class="mainButton" type="button" onclick="placeconfigOpen()">
+		  <img class="iconStyle" src="" th:src="@{/images/icon/place.png}" alt="場所設定" width="64" height="64" />
+		</button>
+        <button id="dispLinesButton" class="mainButton" type="button" onclick="changeDispLines()">
+		  <img class="iconStyle" src="" th:src="@{/images/icon/line.png}" alt="ライン表示" width="64" height="64" />
+		</button>
+	  </div>
+      <div id="userListViewArea">
+	    <table class="userListView" id="userListView">
+		  <tbody>
+		    <tr>
+			  ＜th:block th:each="item,stat : ${form.userList}" th:object="${form.userList[__${stat.index}__]}">
+			    ＜td class="userIconView">
+				  ＜img class="iconStyle" th:id="'userIcon'+${stat.index}" src="" width="64px" height="64px" alt="画像" th:src="${item.iconDataString}" th:attr="onclick='onClickUserIcon('+${stat.index}+');'" />
+				＜/td>
+			  ＜/th:block>
+			＜/tr>
+            ＜tr>
+			  ＜th:block th:each="item,stat : ${form.userList}" th:object="${form.userList[__${stat.index}__]}">
+ 
+			    ＜td class="userNameView" th:style="'background-color:rgba('+${item.LineColorRed}+',' + ${item.LineColorGreen} + ',' + ${item.LineColorBlue}+ ',0.8)'">
+				  ＜div th:utext="${item.userName}">＜/div>
+				＜/td>
+			  ＜/th:block>
+			＜/tr>
+		  ＜/tbody>
+		＜/table>
+	  ＜/div>
+      ＜input type="hidden" id="loginId" name="loginId" value="" th:value="${loginId}" />
+      ＜button type="submit" name="action" value="doReload" id="doReload" class="_hidden">＜/button>
+      ＜input type="hidden" id="isReload" name="isReload" value="" th:value="${isReload}" />
+      ＜input type="hidden" id="reloadTime" name="reloadTime" value="" th:value="${reloadTime}" />
+	＜/form>
+  ＜/div>
+＜/body>
+＜/html>

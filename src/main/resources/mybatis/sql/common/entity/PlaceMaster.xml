@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.PlaceMasterMapper">
+  <sql id="selectAllColumnsFromPlaceMaster">
+        SELECT
+            group_id                                        AS  groupid,
+            place_id                                        AS  placeid,
+            place_name                                      AS  placename,
+            place_type_flg                                  AS  placetypeflg,
+            longitude_and_latitude                          AS  longitudeandlatitude,
+            longitude_and_latitude[0]                       AS  latitude,
+            longitude_and_latitude[1]                       AS  longitude,
+            radius                                          AS  radius,
+            icon_id                                         AS  iconid,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            kidcontrol_user.place_master
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.PlaceMasterEntityWrapper">
+    <include refid="selectAllColumnsFromPlaceMaster"></include>
+    <where>
+ 	  <if test='delflg != null'>
+            del_flg = #{delflg}
+	  </if>
+      <if test='groupid != null'>
+          AND  group_id = #{groupid}
+	  </if>
+	</where>
+    <if test='sort != null'>
+        ORDER BY
+	  <choose>
+	    <when test='sort'>
+            place_id
+	    </when>
+        <otherwise>
+            place_id DESC
+		</otherwise>
+	  </choose>
+	</if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.PlaceMasterEntityWrapper">
+    <include refid="selectAllColumnsFromPlaceMaster"></include>
+        WHERE
+            place_id = #{placeid}
+	<if test='delflg != null'>
+        AND del_flg = #{delflg}
+	</if>
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.PlaceMasterEntityWrapper">
+        INSERT INTO
+            place_master
+        (
+            place_id,
+            place_name,
+            place_type_flg,
+            longitude_and_latitude,
+            radius,
+            icon_id,
+        	group_id,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.placeid},
+            #{rec.placename},
+            #{rec.placetypeflg},
+            point(#{rec.latitude},#{rec.longitude}),
+            #{rec.radius},
+            #{rec.iconid},
+        	#{rec.groupid},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+
+  <update id="update" parameterType="com.kdc.common.entity.db.PlaceMasterEntityWrapper">
+        UPDATE
+            place_master
+
+        SET
+            place_name = #{rec.placename},
+            place_type_flg = #{rec.placetypeflg},
+            longitude_and_latitude = point(#{rec.latitude},#{rec.longitude}),
+            radius = #{rec.radius},
+            icon_id = #{rec.iconid},
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+
+        WHERE
+            place_id = #{rec.placeid}
+        AND del_flg = 0
+  </update>
+
+  <update id="delete" parameterType="com.kdc.common.entity.db.PlaceMasterEntityWrapper">
+        UPDATE
+            place_master
+        SET
+            del_flg = 1,
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+            
+        WHERE
+            place_id = #{rec.placeid}
+  </update>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.web.WebMainMapper">
+  <select id="getValidUser" resultType="com.kdc.common.entity.db.UserMasterEntity">
+        SELECT
+            UM.user_id                                      AS  userid,
+            UM.password                                     AS  password,
+            UM.user_name                                    AS  username,
+            UM.icon_id                                      AS  iconid,
+            UM.icon_file                                    AS  iconfile,
+            UM.group_id                                     AS  groupid,
+            UM.auth_level                                   AS  authlevel,
+            UM.line_color                                   AS  linecolor,
+            UM.marker_color                                 AS  markercolor,
+            UM.disp_order                                   AS  disporder
+
+        FROM
+            user_master             UM,
+            user_device             UD
+  
+        WHERE 
+            UM.user_id = UD.user_id
+        AND UD.telephone_number is not null
+        AND UM.del_flg = 0
+        AND UD.del_flg = 0
+        ORDER BY
+            UM.disp_order,
+            UM.update_date
+  </select>
+</mapper>

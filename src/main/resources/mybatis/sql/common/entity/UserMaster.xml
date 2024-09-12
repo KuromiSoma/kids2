@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.UserMasterMapper">
+  <sql id="selectAllColumnsFromUserMaster">
+        SELECT
+            user_id                                         AS  userid,
+            password                                        AS  password,
+            user_name                                       AS  username,
+            icon_id                                         AS  iconid,
+            icon_file                                       AS  iconfile,
+            group_id                                        AS  groupid,
+            auth_level                                      AS  authlevel,
+            line_color                                      AS  linecolor,
+            marker_color                                    AS  markercolor,
+            disp_order                                      AS  disporder,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            user_master
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.UserMasterEntity">
+    <include refid="selectAllColumnsFromUserMaster"></include>
+    <where>
+	  <if test='delflg != null'>
+            del_flg = #{delflg}
+	  </if>
+	</where>
+        ORDER BY
+            disp_order,
+            update_date
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.UserMasterEntity">
+    <include refid="selectAllColumnsFromUserMaster"></include>
+        WHERE
+            user_id = #{userid}
+	<if test='delflg != null'>
+        AND del_flg = #{delflg}
+	</if>
+  </select>
+
+  <select id="selectUser" resultType="com.kdc.common.entity.db.UserMasterEntity">
+    <include refid="selectAllColumnsFromUserMaster"></include>
+        WHERE
+            user_id = #{userid}
+        AND password = #{password}
+	<if test='delflg != null'>
+        AND del_flg = #{delflg}
+	</if>
+  </select>
+
+  <select id="selectUserGroupId" resultType="com.kdc.common.entity.db.UserMasterEntity">
+    	SELECT MIN(group_id) as groupid
+    	FROM USER_MASTER
+        WHERE del_flg = #{delflg}
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.UserMasterEntity">
+        INSERT INTO
+            user_master
+        (
+            user_id,
+            password,
+            user_name,
+	<if test='rec.iconid != null'>
+            icon_id,
+            icon_file,
+	</if>
+            group_id,
+            auth_level,
+            line_color,
+            marker_color,
+            disp_order,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.userid},
+            #{rec.password},
+            #{rec.username},
+	<if test='rec.iconid != null'>
+            #{rec.iconid},
+            #{rec.iconfile},
+	</if>
+            #{rec.groupid},
+            #{rec.authlevel},
+            #{rec.linecolor},
+            #{rec.markercolor},
+            #{rec.disporder},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+ 
+  <update id="update" parameterType="com.kdc.common.entity.db.UserMasterEntity">
+        UPDATE
+            user_master
+        SET
+	<if test='rec.password != null'>
+            password = #{rec.password},
+	</if>
+    <if test='rec.username != null'>
+            user_name = #{rec.username},
+	</if>
+    <if test='rec.iconid != null'>
+            icon_id = #{rec.iconid},
+            icon_file = #{rec.iconfile},
+	</if>
+    <if test='rec.groupid != null'>
+            group_id = #{rec.groupid},
+	</if>
+    <if test='rec.authlevel != null'>
+            auth_level = #{rec.authlevel},
+	</if>
+    <if test='rec.linecolor != null'>
+            line_color = #{rec.linecolor},
+	</if>
+    <if test='rec.markercolor != null'>
+            marker_color = #{rec.markercolor},
+	</if>
+    <if test='rec.disporder != null'>
+            disp_order = #{rec.disporder},
+	</if>
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+        WHERE
+            user_id = #{rec.userid}
+  </update>
+
+  <update id="delete" parameterType="com.kdc.common.entity.db.UserMasterEntity">
+        UPDATE 
+            user_master
+
+        SET
+            del_flg = 1,
+            update_user_id =#{rec.updateuserid},
+            update_date = #{rec.updatedate}
+
+        WHERE
+            user_id = #{rec.userid}
+  </update>
+</mapper>
