@@ -69,28 +69,28 @@
 	    <table class="userListView" id="userListView">
 		  <tbody>
 		    <tr>
-			  ＜th:block th:each="item,stat : ${form.userList}" th:object="${form.userList[__${stat.index}__]}">
-			    ＜td class="userIconView">
-				  ＜img class="iconStyle" th:id="'userIcon'+${stat.index}" src="" width="64px" height="64px" alt="画像" th:src="${item.iconDataString}" th:attr="onclick='onClickUserIcon('+${stat.index}+');'" />
-				＜/td>
-			  ＜/th:block>
-			＜/tr>
-            ＜tr>
-			  ＜th:block th:each="item,stat : ${form.userList}" th:object="${form.userList[__${stat.index}__]}">
+			  <th:block th:each="item,stat : ${form.userList}" th:object="${form.userList[__${stat.index}__]}">
+			    <td class="userIconView">
+				  <img class="iconStyle" th:id="'userIcon'+${stat.index}" src="" width="64px" height="64px" alt="画像" th:src="${item.iconDataString}" th:attr="onclick='onClickUserIcon('+${stat.index}+');'" />
+				</td>
+			  </th:block>
+			</tr>
+            <tr>
+			  <th:block th:each="item,stat : ${form.userList}" th:object="${form.userList[__${stat.index}__]}">
  
-			    ＜td class="userNameView" th:style="'background-color:rgba('+${item.LineColorRed}+',' + ${item.LineColorGreen} + ',' + ${item.LineColorBlue}+ ',0.8)'">
-				  ＜div th:utext="${item.userName}">＜/div>
-				＜/td>
-			  ＜/th:block>
-			＜/tr>
-		  ＜/tbody>
-		＜/table>
-	  ＜/div>
-      ＜input type="hidden" id="loginId" name="loginId" value="" th:value="${loginId}" />
-      ＜button type="submit" name="action" value="doReload" id="doReload" class="_hidden">＜/button>
-      ＜input type="hidden" id="isReload" name="isReload" value="" th:value="${isReload}" />
-      ＜input type="hidden" id="reloadTime" name="reloadTime" value="" th:value="${reloadTime}" />
-	＜/form>
-  ＜/div>
-＜/body>
-＜/html>
+			    <td class="userNameView" th:style="'background-color:rgba('+${item.LineColorRed}+',' + ${item.LineColorGreen} + ',' + ${item.LineColorBlue}+ ',0.8)'">
+				  <div th:utext="${item.userName}"></div>
+				</td>
+			  </th:block>
+			</tr>
+		  </tbody>
+		</table>
+	  </div>
+      <input type="hidden" id="loginId" name="loginId" value="" th:value="${loginId}" />
+      <button type="submit" name="action" value="doReload" id="doReload" class="_hidden"></button>
+      <input type="hidden" id="isReload" name="isReload" value="" th:value="${isReload}" />
+      <input type="hidden" id="reloadTime" name="reloadTime" value="" th:value="${reloadTime}" />
+	</form>
+  </div>
+</body>
+</html>
