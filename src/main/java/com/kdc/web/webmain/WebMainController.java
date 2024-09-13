@@ -56,7 +56,6 @@ public class WebMainController extends MasterPageController {
 				|| !StringUtils.equals(session.getId(), super.loginInfoHolder.getSessionId())) {
 			return null;
 		}
-		System.out.println("aaatest");
 		
 		// 入力項目の初期値を設定する
 		WebMainForm form = new WebMainForm();
