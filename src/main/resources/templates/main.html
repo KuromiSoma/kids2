@@ -78,7 +78,7 @@
             <tr>
 			  <th:block th:each="item,stat : ${form.userList}" th:object="${form.userList[__${stat.index}__]}">
  
-			    <td class="userNameView" th:style="'background-color:rgba('+${item.LineColorRed}+',' + ${item.LineColorGreen} + ',' + ${item.LineColorBlue}+ ',0.8)'">
+			   <td class="userNameView" th:style="'background-color:rgba('+${item.LineColorRed}+',' + ${item.LineColorGreen} + ',' + ${item.LineColorBlue}+ ',0.8)'">
 				  <div th:utext="${item.userName}"></div>
 				</td>
 			  </th:block>
