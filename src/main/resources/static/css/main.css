@@ -1,0 +1,104 @@
+@CHARSET "UTF-8";
+
+#mainArea {
+	position: fixed;
+	height: 100%;
+	background-color: #FFFFFF;
+    top: 0px;
+}
+
+#map-canvas {
+    height : 100%;
+    top: 0px;
+}
+
+.menuRirekiDiv {
+	width: 170px;
+	display: block;
+	height: 30px;
+	text-decoration: none;
+	border-bottom: solid 0.5px;
+}
+
+.menuKanriDiv {
+	width: 170px;
+	display: block;
+	height: 30px;
+	text-decoration: none;
+	border-bottom: solid 0.5px;
+}
+
+.menuUserDiv {
+	width: 170px;
+	display: block;
+	height: 30px;
+	text-decoration: none;
+}
+
+.menuButtonMain {
+	font-size: 14px;
+	border-style: none;
+	text-align: left;
+	background-color: #F0F8FF;
+	height: 29px;
+	width: 170px;
+}
+
+.buttonSet {
+	width: 300px;
+}
+
+button._off>.iconStyle {
+	background-color: #999999;
+}
+
+#userListViewArea {
+	overflow-x: auto;
+	box-sizing: border-box;
+	width: 1040px;	/* 104*10件分のみ幅を確保 */
+	height: 125px;
+	position: absolute;
+	left: 360px;
+	bottom:10px;
+}
+
+#userListView {
+	width: 1040px;	/* JQueryで実際のユーザ項目数*104に書き換える */
+}
+
+.userIconView {
+	box-sizing: border-box;
+	width: 104px;
+	height: 66px;
+	text-align: center;
+	vertical-align: center;
+}
+
+.userIconView>.iconStyle {
+	box-sizing: border-box;
+	border: solid;
+	border-radius: 10px;
+	width: 64px;
+	height: 64px;
+}
+
+.userNameView {
+	box-sizing: border-box;
+	width: 104px;
+	height: 32px;
+	font-size: 16px;
+	text-align: center;
+	vertical-align: center;
+}
+
+.userSelect {
+	box-sizing: border-box;
+	text-align: right;
+	width:  65px;
+	height: 65px;
+	position: absolute;
+	left:150px;
+	top:60px;
+	font-family: "ＭＳ 明朝",serif;
+	font-size: 16px;
+}

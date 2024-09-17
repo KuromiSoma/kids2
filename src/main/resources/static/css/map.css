@@ -1,0 +1,24 @@
+@CHARSET "UTF-8";
+
+#map-canvas {
+    height : -webkit-calc(100% - 40px);
+    top: 40px;
+}
+
+.rangeBarArea {
+	border: solid;
+	box-sizing: border-box;
+	height: 40px;
+	width: -webkit-calc(100% - 320px);
+	position: absolute;
+	bottom: 32px;
+	left: 250px;
+	background-color: #32CD32;
+	font-weight: bold;
+}
+
+.rangeBarArea>.rangeBar {
+	margin-left: 10px;
+	height: 30px;
+	width: -webkit-calc(100% - 20px);
+}
