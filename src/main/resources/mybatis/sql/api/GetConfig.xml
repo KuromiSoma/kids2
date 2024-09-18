@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.api.GetConfigMapper">
+  <select id="getSendIntervalConfigList" resultType="com.kdc.common.entity.db.SendIntervalConfigEntity">
+        SELECT
+            auth_level                                      AS  authlevel,
+            day_of_week                                     AS  dayofweek,
+            config_no                                       AS  configno,
+            start_time                                      AS  starttime,
+            end_time                                        AS  endtime,
+            transmission_interval                           AS  transmissioninterval
+
+        FROM
+            send_interval_config
+
+        WHERE
+            del_flg = 0
+        AND group_id = #{groupid}
+
+        ORDER BY
+            auth_level,
+            day_of_week,
+            config_no
+  </select>
+
+  <select id="getUserAlertConfigList" resultType="com.kdc.common.entity.db.UserAlertConfigEntity">
+        SELECT
+            auth_level                                      AS  authlevel,
+            notification_auth_level                         AS  notificationauthlevel,
+            location_display_flg                            AS  locationdisplayflg,
+            moving_distance_display_flg                     AS  movingdistancedisplayflg,
+            battery_level_display_flg                       AS  batteryleveldisplayflg,
+            access_time_display_flg                         AS  accesstimedisplayflg,
+            reception_status_display_flg                    AS  receptionstatusdisplayflg,
+            
+            battery_level_alert_flg                         AS  batterylevelalertflg,
+            battery_notification                            AS  batterynotification,
+            battery_popup                                   AS  batterypopup,
+            battery_alarm_time                              AS  batteryalarmtime,
+            battery_vibration_time                          AS  batteryvibrationtime,
+            battery_reference                               AS  batteryreference,
+
+            connection_alert_flg                            AS  connectionalertflg,
+            connection_notification                         AS  connectionnotification,
+            connection_popup                                AS  connectionpopup,
+            connection_alarm_time                           AS  connectionalarmtime,
+            connection_vibration_time                       AS  connectionvibrationtime,
+
+            sos_alert_flg                                   AS  sosalertflg,
+            sos_notification                                AS  sosnotification,
+            sos_popup                                       AS  sospopup,
+            sos_alarm_time                                  AS  sosalarmtime,
+            sos_vibration_time                              AS  sosvibrationtime
+
+        FROM
+            user_alert_config
+
+        WHERE
+            notification_auth_level = #{authlevel}
+        AND group_id = #{groupid}
+        AND del_flg = 0
+
+        ORDER BY
+            auth_level
+  </select>
+
+  <select id="getPlaceAlertConfigList" resultType="com.kdc.common.entity.db.PlaceAlertConfigEntity">
+        SELECT
+            auth_level                                      AS  authlevel,
+            notification_auth_level                         AS  notificationauthlevel,
+            place_id                                        AS  placeid,
+            place_alert_flg                                 AS  placealertflg,
+            place_notification                              AS  placenotification,
+            place_popup                                     AS  placepopup,
+            place_alarm_time                                AS  placealarmtime,
+            place_vibration_time                            AS  placevibrationtime
+
+        FROM
+            place_alert_config
+
+        WHERE
+            notification_auth_level = #{authlevel}
+        AND group_id = #{groupid}
+        AND del_flg = 0
+
+        ORDER BY
+            auth_level,
+            place_id
+  </select>
+	
+  <update id="updateUserDevice" parameterType="com.kdc.common.entity.db.UserDeviceEntity">
+        UPDATE
+            user_device
+        SET
+            config_sync_date = #{rec.configsyncdate},
+            update_date = #{rec.updatedate},
+            update_user_id = #{rec.updateuserid}
+
+        WHERE
+            user_id = #{rec.userid} 
+        AND del_flg=0
+  </update>
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.UserAlertRecordMapper">
+  <sql id="selectAllColumnsFromUserAlertRecord">
+        SELECT
+            user_id                                         AS  userid,
+            last_battery_alert_date                         AS  lastbatteryalertdate,
+            last_disconnection_alert_date                   AS  lastdisconnectionalertdate,
+            last_reconnection_alert_date                    AS  lastreconnectionalertdate,
+            last_sos_alert_date                             AS  lastsosalert_date,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            user_alert_record
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.UserAlertRecordEntity">
+    <include refid="selectAllColumnsFromUserAlertRecord"></include>
+    <where>
+      <if test='delflg != null'>
+            del_flg = #{delflg}
+      </if>
+    </where>
+    <if test='sort != null'>
+        ORDER BY
+      <choose>
+        <when test='sort'>
+            user_id
+        </when>
+        <otherwise>
+            user_id DESC
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.UserAlertRecordEntity">
+    <include refid="selectAllColumnsFromUserAlertRecord"></include>
+        WHERE
+            user_id = #{userid}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <insert id="upsert" parameterType="com.kdc.common.entity.db.UserAlertRecordEntity">
+        INSERT INTO
+            user_alert_record
+        (
+            user_id,
+    <if test='rec.lastbatteryalertdate != null'>
+            last_battery_alert_date,
+    </if>
+    <if test='rec.lastdisconnectionalertdate != null'>
+            last_disconnection_alert_date,
+    </if>
+    <if test='rec.lastreconnectionalertdate != null'>
+            last_reconnection_alert_date,
+    </if>
+    <if test='rec.lastsosalertdate != null'>
+            last_sos_alert_date,
+    </if>
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.userid},
+    <if test='rec.lastbatteryalertdate != null'>
+            #{rec.lastbatteryalertdate},
+    </if>
+    <if test='rec.lastdisconnectionalertdate != null'>
+            #{rec.lastdisconnectionalertdate},
+    </if>
+    <if test='rec.lastreconnectionalertdate != null'>
+            #{rec.lastreconnectionalertdate},
+    </if>
+    <if test='rec.lastsosalertdate != null'>
+            #{rec.lastsosalertdate},
+    </if>
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+        ON CONFLICT
+        ON CONSTRAINT user_alert_record_pk
+        DO UPDATE
+        SET
+    <if test='rec.lastbatteryalertdate != null'>
+            last_battery_alert_date = #{rec.lastbatteryalertdate},
+    </if>
+    <if test='rec.lastdisconnectionalertdate != null'>
+            last_disconnection_alert_date = #{rec.lastdisconnectionalertdate},
+    </if>
+    <if test='rec.lastreconnectionalertdate != null'>
+            last_reconnection_alert_date = #{rec.lastreconnectionalertdate},
+    </if>
+    <if test='rec.lastsosalertdate != null'>
+            last_sos_alert_date = #{rec.lastsosalertdate},
+    </if>
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+  </insert>
+</mapper>

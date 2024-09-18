@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.PlaceAlertRecordMapper">
+  <sql id="selectAllColumnsFromPlaceAlertRecord">
+        SELECT
+            user_id                                         AS  userid,
+            place_id                                        AS  placeid,
+            last_place_in_alert_date                        AS  lastplaceinalertdate,
+            last_place_out_alert_date                       AS  lastplaceoutalertdate,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            place_alert_record
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.PlaceAlertRecordEntity">
+    <include refid="selectAllColumnsFromPlaceAlertRecord"></include>
+    <where>
+      <if test='delflg != null'>
+            del_flg = #{delflg}
+      </if>
+    </where>
+    <if test='sort1 != null'>
+        ORDER BY
+      <choose>
+        <when test='sort1'>
+            user_id,
+        </when>
+        <otherwise>
+            user_id DESC,
+        </otherwise>
+      </choose>
+      <choose>
+        <when test='sort2'>
+            place_id
+        </when>
+        <otherwise>
+            place_id DESC
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.PlaceAlertRecordEntity">
+    <include refid="selectAllColumnsFromPlaceAlertRecord"></include>
+        WHERE
+            user_id = #{userid}
+        AND place_id = #{placeid}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <insert id="upsert" parameterType="com.kdc.common.entity.db.PlaceAlertRecordEntity">
+        INSERT INTO
+            place_alert_record
+        (
+            user_id,
+            place_id,
+    <if test='rec.lastplaceinalertdate != null'>
+            last_place_in_alert_date,
+    </if>
+    <if test='rec.lastplaceoutalertdate != null'>
+            last_place_out_alert_date,
+    </if>
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.userid},
+            #{rec.placeid},
+    <if test='rec.lastplaceinalertdate != null'>
+            #{rec.lastplaceinalertdate},
+    </if>
+    <if test='rec.lastplaceoutalertdate != null'>
+            #{rec.lastplaceoutalertdate},
+    </if>
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+        ON CONFLICT
+        ON CONSTRAINT place_alert_record_pk
+        DO UPDATE
+        SET
+    <if test='rec.lastplaceinalertdate != null'>
+            last_place_in_alert_date = #{rec.lastplaceinalertdate},
+    </if>
+    <if test='rec.lastplaceoutalertdate != null'>
+            last_place_out_alert_date = #{rec.lastplaceoutalertdate},
+    </if>
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+  </insert>
+</mapper>

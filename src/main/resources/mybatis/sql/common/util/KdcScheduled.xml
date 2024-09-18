@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.util.KdcScheduledMapper">
+    <sql id="selectUsingSendInterval">
+        SELECT
+            auth_level,
+            day_of_week,
+            start_time,
+            end_time,
+            transmission_interval
+
+        FROM
+            send_interval_config
+
+        WHERE
+            day_of_week = #{dayofweek}
+        AND start_time <![CDATA[ <= ]]> #{date}::time
+        AND end_time <![CDATA[ >= ]]> #{date}::time
+        AND del_flg = 0
+    </sql>
+
+    <select id="searchUsingSendInterval" resultType="Integer">
+        SELECT
+            count(1)
+        FROM
+            send_interval_config
+
+        WHERE
+            day_of_week = #{dayofweek}
+        AND start_time <![CDATA[ <= ]]> #{date}::time
+        AND end_time <![CDATA[ >= ]]> #{date}::time
+        AND del_flg = 0
+        AND group_id = #{groupid}
+    </select>
+
+    <update id="updateDisconnect">
+        UPDATE
+            user_location
+        SET
+            connection_status = 0,
+            update_user_id = #{updateuserid},
+            update_date = #{date}
+        WHERE
+            user_id IN (
+                SELECT
+                    UL.user_id
+                FROM
+                    user_location UL,
+                    user_master UM,
+                    user_device UD,
+                    (
+      <include refid="selectUsingSendInterval"></include>
+                    ) SC
+                WHERE
+                    UL.user_id = UM.user_id
+                AND UM.user_id = UD.user_id
+                AND UM.auth_level = SC.auth_level
+                AND UD.telephone_number is not null
+                AND UL.del_flg = 0
+                AND UM.del_flg = 0
+                AND UD.del_flg = 0
+                AND UM.group_id = #{groupid}
+                AND CAST( COALESCE(SC.transmission_interval, '0') || ' minutes' AS interval )
+                    <![CDATA[ < ]]> #{date}::timestamp - UL.last_location_date
+            )
+    </update>
+
+    <select id="searchUserOnDisconnectionAlert" resultType="com.kdc.common.entity.KdcAlertEntity">
+        SELECT
+            UM.user_id,
+            UM.user_name,
+            UA.auth_level,
+            UA.notification_auth_level
+
+        FROM
+            user_location UL,
+            user_master UM,
+            user_device UD,
+            user_alert_config UA,
+            (
+      <include refid="selectUsingSendInterval"></include>
+            ) SC
+
+        WHERE
+            UL.user_id = UM.user_id
+        AND UM.user_id = UD.user_id
+        AND UM.auth_level = UA.auth_level
+        AND UA.auth_level = SC.auth_level
+        AND UM.group_id = UA.group_id
+        AND UD.telephone_number is not null
+        AND UA.connection_alert_flg = 1
+        AND CASE WHEN 
+                DATE_TRUNC('day', UL.last_location_date)
+                <![CDATA[ >= ]]> DATE_TRUNC('day', #{date}::timestamp)
+            THEN CAST( COALESCE(SC.transmission_interval, 0) + ${disconnecttime} || ' minutes' AS interval )
+                 <![CDATA[ < ]]> #{date}::timestamp - UL.last_location_date
+            ELSE CAST( COALESCE(SC.transmission_interval, 0) + ${disconnecttime} || ' minutes' AS interval )
+                 <![CDATA[ < ]]> #{date}::timestamp - (DATE_TRUNC('day', #{date}::timestamp) + SC.start_time)
+            END
+        AND UL.del_flg = 0
+        AND UM.del_flg = 0
+        AND UD.del_flg = 0
+        AND UA.del_flg = 0
+
+        ORDER BY
+            UM.user_id,
+            UA.auth_level,
+            UA.notification_auth_level
+    </select>
+
+    <select id="searchUserOnReconnectionAlert" resultType="com.kdc.common.entity.KdcAlertEntity">
+        SELECT
+            UM.user_id,
+            UM.user_name,
+            UA.auth_level,
+            UA.notification_auth_level
+
+        FROM
+            user_location UL,
+            user_master UM,
+            user_device UD,
+            user_alert_config UA,
+            user_alert_record UR,
+            (
+      <include refid="selectUsingSendInterval"></include>
+            ) SC
+
+        WHERE
+            UL.user_id = UM.user_id
+        AND UM.user_id = UD.user_id
+        AND UM.auth_level = UA.auth_level
+        AND UM.user_id = UR.user_id
+        AND UA.auth_level = SC.auth_level
+        AND UM.group_id = UA.group_id
+        AND UD.telephone_number is not null
+        AND UL.connection_status = 1
+        AND UA.connection_alert_flg = 1
+        AND CASE WHEN UR.last_disconnection_alert_date IS NOT NULL
+            THEN CASE WHEN UR.last_reconnection_alert_date IS NOT NULL
+                 THEN UR.last_disconnection_alert_date <![CDATA[ <= ]]> UL.last_location_date
+                  AND UR.last_disconnection_alert_date <![CDATA[ > ]]> UR.last_reconnection_alert_date
+                 ELSE TRUE END
+            ELSE FALSE END
+        AND UL.del_flg = 0
+        AND UM.del_flg = 0
+        AND UD.del_flg = 0
+        AND UA.del_flg = 0
+        AND UR.del_flg = 0
+
+        ORDER BY
+            UM.user_id,
+            UM.auth_level,
+            UA.notification_auth_level
+    </select>
+</mapper>

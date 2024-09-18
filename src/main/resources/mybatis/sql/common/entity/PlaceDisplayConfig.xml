@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.PlaceDisplayConfigMapper">
+  <sql id="selectAllColumnsFromPlaceDisplayConfig">
+        SELECT
+            auth_level                                      AS  authlevel,
+            place_id                                        AS  placeid,
+            place_disp_flg                                  AS  placedispflg,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            place_display_config
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.PlaceDisplayConfigEntity">
+    <include refid="selectAllColumnsFromPlaceDisplayConfig"></include>
+    <where>
+      <if test='delflg != null'>
+            del_flg = #{delflg}
+      </if>
+    </where>
+    <if test='sort1 != null'>
+        ORDER BY
+      <choose>
+        <when test='sort1'>
+            auth_level,
+        </when>
+        <otherwise>
+            auth_level DESC,
+        </otherwise>
+      </choose>
+      <choose>
+        <when test='sort2'>
+            place_id
+        </when>
+        <otherwise>
+            place_id DESC
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.PlaceDisplayConfigEntity">
+    <include refid="selectAllColumnsFromPlaceDisplayConfig"></include>
+        WHERE
+            auth_level = #{authlevel}
+        AND place_id = #{placeid}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.PlaceDisplayConfigEntity">
+        INSERT INTO
+            place_display_config
+        (
+            auth_level,
+            place_id,
+            place_disp_flg,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.authlevel},
+            #{rec.placeid},
+            #{rec.placedispflg},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+
+  <insert id="upsert" parameterType="com.kdc.common.entity.db.PlaceDisplayConfigEntity">
+        INSERT INTO
+            place_display_config
+        (
+            auth_level,
+            place_id,
+            place_disp_flg,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.authlevel},
+            #{rec.placeid},
+            #{rec.placedispflg},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+        ON CONFLICT
+        ON CONSTRAINT place_display_config_pk
+        DO UPDATE
+        SET
+            place_disp_flg = #{rec.placedispflg},
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+  </insert>
+
+  <update id="delete" parameterType="com.kdc.common.entity.db.PlaceDisplayConfigEntity">
+        UPDATE
+            place_display_config
+        SET
+            del_flg = 1,
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+            
+        WHERE
+            place_id = #{rec.placeid}
+  </update>
+</mapper>

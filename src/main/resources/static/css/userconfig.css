@@ -1,0 +1,202 @@
+@CHARSET "UTF-8";
+
+#wrapper {
+	height: 100%;
+}
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#mainArea {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+}
+
+th, td {
+	overflow: hidden;
+}
+
+/* ユーザ選択 */
+.userSelect {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+#user {
+	width: 160px;
+	margin-left: 10px;
+}
+
+#userDiv {
+	position: relative;
+	padding: 20px 10px;
+	font-size: 20px;
+	border: 1px solid #325A8C;
+}
+
+#userDiv::after {
+	content: "\30E6\30FC\30B6";	/* "ユーザ" */
+	position: absolute;
+	top: -14px;
+	left: 10px;
+	background: #F0F8FF;
+	font-size: 20px;
+	color: #325A8C;
+	padding: 0 10px;
+}
+
+/* ブロックボタン位置設定 */
+.blockButtonDiv {
+	z-index: 2;
+	width: 200px;
+	height: -webkit-calc(100% - 40px);
+	overflow: auto;
+	position: fixed;
+	top: 40px;
+	left: 0px;
+	padding-left: 10px;
+	background-color: #F0F8FF;
+}
+
+.buttonDivU>button {
+	width: auto;
+	padding: 0;
+	margin: 20px 0 20px 20px;
+	background: none;
+	border: 0;
+	font-size: 0;
+	line-height: 0;
+	overflow: visible;
+	cursor: pointer;
+}
+
+.buttonDivU {
+	position: absolute;
+	left: 0px;
+	bottom: 50px;
+	box-sizing: border-box;
+	text-align: right;
+	width: 180px;
+	height: 65px;
+}
+
+#block5 {
+	padding-top: 70px;
+	margin-left: 240px;
+	position: relative;
+}
+
+td, th {
+	border-collapse: collapse;
+	border: solid 1px;
+}
+
+tr, th, td {
+	box-sizing: border-box;
+}
+
+.list7 {
+	border-collapse: collapse;
+	border-bottom: solid 1px;
+	width: 800px;
+}
+
+.list7 th {
+	width: 170px;
+	height: 60px;
+}
+
+.list7 th.high {
+	width: 170px;
+	height: 100px;
+}
+
+.list7 tr.hidden {
+	display: none;
+}
+
+.list7 td {
+	padding-left: 20px;
+}
+
+.iconDiv {
+	width: 80px;
+	height: 80px;
+	border: solid 0.5px;
+	float: left;
+}
+
+.kanriLevelLabel {
+	margin-right: 30px;
+}
+
+.leftDiv {
+	width: 95px;
+	height: 100px;
+	float: left;
+	margin: 10px auto auto 10px;
+}
+
+/* 表示色(選択値)*/
+.dispColor {
+	width: 40px;
+	height: 40px;
+	border: solid 0.5px;
+	margin: 10px auto auto 10px;
+	/* background-color:rgb(0,0,0); */
+}
+
+#lineColor {
+	width: 40px;
+	height: 40px;
+	border: solid 0.5px;
+	margin: 10px auto auto 10px;
+	/* background-color:rgb(0,0,0); */
+}
+
+#dispMarkerColor {
+	width: 40px;
+	height: 40px;
+	border: solid 0.5px;
+	margin: 10px auto auto 10px;
+	/* background-color:rgb(0,0,0); */
+}
+
+.colorTableDiv {
+	width: 420px;
+	height: 100px;
+	margin: auto auto auto 10px;
+	float: left;
+}
+
+.colorTable {
+	border-spacing: 10px;
+}
+
+.colorTable td {
+	width: 40px;
+	height: 40px;
+}
+
+.colorDiv {
+	marging-left: 50px;
+}
+
+.rangeBarArea {
+	border: solid;
+	box-sizing: border-box;
+	height: 40px;
+	width: 510px;
+	margin-left: 70px;
+	font-weight: bold;
+}
+
+.rangeBar {
+	height: 30px;
+	width: 500px;
+}
+}

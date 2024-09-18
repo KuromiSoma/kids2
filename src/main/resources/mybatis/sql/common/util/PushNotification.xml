@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.util.PushNotificationMapper">
+  <sql id="selectTokenIdListBase">
+        FROM
+            user_device UD,
+            user_master UM,
+            user_alert_config UA,
+            user_master UM2
+            
+        WHERE
+            UD.user_id = UM.user_id
+        AND UM.auth_level = UA.notification_auth_level
+        AND UA.auth_level = UM2.auth_level
+        AND UM2.group_id = UA.group_id
+        AND UM.group_id = UM2.group_id
+        AND UD.del_flg = 0
+        AND UM.del_flg = 0
+        AND UA.del_flg = 0
+        AND UM2.del_flg = 0
+        AND UM2.user_id = #{userid}
+  </sql>
+
+  <select id="selectSendIconTokenIdList" resultType="com.kdc.common.entity.api.PushNotificationEntity">
+        SELECT
+            UD.token_id                                     AS tokenid,
+            ''                                              AS notification,
+            ''                                              AS popup,
+            ''                                              AS alarmtime,
+            ''                                              AS vibrationtime
+            
+    <include refid="selectTokenIdListBase"></include>
+    <if test="withoutMyself">
+        AND UM.user_id != #{userid}
+    </if>
+        AND UA.location_display_flg = 1
+  </select>
+
+  <select id="selectBatteryAlertTokenIdList" resultType="com.kdc.common.entity.api.PushNotificationEntity">
+        SELECT
+            UD.token_id                                     AS tokenid,
+            UA.battery_notification                         AS notification,
+            UA.battery_popup                                AS popup,
+            UA.battery_alarm_time                           AS alarmtime,
+            UA.battery_vibration_time                       AS vibrationtime
+            
+    <include refid="selectTokenIdListBase"></include>
+        AND UA.battery_level_alert_flg = 1
+        AND UA.battery_reference <![CDATA[ > ]]> #{batterylevel}
+  </select>
+
+  <select id="selectConnectionAlertTokenIdListByAuthLevel" resultType="com.kdc.common.entity.api.PushNotificationEntity">
+        SELECT
+            UD.token_id                                     AS tokenid,
+            UA.connection_notification                      AS notification,
+            UA.connection_popup                             AS popup,
+            UA.connection_alarm_time                        AS alarmtime,
+            UA.connection_vibration_time                    AS vibrationtime
+
+        FROM
+            user_device UD,
+            user_master UM,
+            user_alert_config UA
+            
+        WHERE
+            UD.user_id = UM.user_id
+        AND UM.auth_level = UA.notification_auth_level
+        AND UM.group_id = UA.group_id
+        AND UD.del_flg = 0
+        AND UM.del_flg = 0
+        AND UA.del_flg = 0
+        AND UA.auth_level = #{authlevel}
+        AND UA.connection_alert_flg = 1
+        AND UM.group_id = #{groupid}
+  </select>
+
+  <select id="selectSosAlertTokenIdList" resultType="com.kdc.common.entity.api.PushNotificationEntity">
+        SELECT
+            UD.token_id                                     AS tokenid,
+            UA.sos_notification                             AS notification,
+            UA.sos_popup                                    AS popup,
+            UA.sos_alarm_time                               AS alarmtime,
+            UA.sos_vibration_time                           AS vibrationtime
+
+    <include refid="selectTokenIdListBase"></include>
+        AND UA.sos_alert_flg = 1
+  </select>
+
+  <select id="selectPlaceAlertTokenIdList" resultType="com.kdc.common.entity.api.PushNotificationEntity">
+        SELECT
+            UD.token_id                                     AS tokenid,
+            PA.place_notification                           AS notification,
+            PA.place_popup                                  AS popup,
+            PA.place_alarm_time                             AS alarmtime,
+            PA.place_vibration_time                         AS vibrationtime
+
+        FROM
+            user_device UD,
+            user_master UM,
+            place_alert_config PA,
+            user_master UM2
+            
+        WHERE
+            UD.user_id = UM.user_id
+        AND UM.auth_level = PA.notification_auth_level
+        AND PA.auth_level = UM2.auth_level
+        AND UD.del_flg = 0
+        AND UM.del_flg = 0
+        AND PA.del_flg = 0
+        AND UM2.del_flg = 0
+        AND UM2.user_id = #{userid}
+        AND PA.place_id = #{placeid}
+        AND PA.place_alert_flg = 1
+  </select>
+
+  <select id="selectChangeConfigTokenIdList" resultType="com.kdc.common.entity.api.PushNotificationEntity">
+        SELECT
+            UD.token_id                                     AS tokenid,
+            ''                                              AS notification,
+            ''                                              AS popup,
+            ''                                              AS alarmtime,
+            ''                                              AS vibrationtime
+        FROM
+            user_device UD,
+            user_master UM
+        WHERE
+            UD.user_id = UM.user_id
+        AND UD.del_flg = 0
+        AND UM.del_flg = 0
+  </select>
+
+</mapper>

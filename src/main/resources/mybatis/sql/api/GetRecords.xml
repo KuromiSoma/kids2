@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.api.GetRecordsMapper">
+    <select id="getRecordList" resultType="com.kdc.common.entity.db.UserLocationRecordEntityWrapper">
+        SELECT
+            UL.receive_date                                 AS  receivedate,
+            UL.longitude_and_latitude[0]                    AS  latitude,
+            UL.longitude_and_latitude[1]                    AS  longitude,
+            CASE
+            WHEN UC.battery_level_display_flg = 1
+            THEN UL.battery_level
+            ELSE NULL END                                   AS  batterylevel,
+            CASE
+            WHEN UC.reception_status_display_flg = 1
+            THEN UL.reception_status
+            ELSE NULL END                                   AS  receptionstatus
+
+        FROM
+            user_location_record    UL,
+            user_master             UM,
+            user_device             UD,
+            user_alert_config       UC,
+            user_master             UM2
+  
+        WHERE
+            UL.user_id = UM.user_id
+        AND UM.user_id = UD.user_id
+        AND UM.auth_level = UC.auth_level
+        AND UC.notification_auth_level = UM2.auth_level
+        AND UM2.group_id = UC.group_id
+        AND UD.telephone_number is not null
+        AND UC.location_display_flg = 1
+        AND UL.del_flg = 0
+        AND UM.del_flg = 0
+        AND UD.del_flg = 0
+        AND UC.del_flg = 0
+        AND UM2.del_flg = 0
+        AND UL.user_id = #{rec.userid}
+        AND DATE_TRUNC('day', UL.receive_date) = #{rec.receivedate}
+        AND UM2.user_id = #{userid}
+
+        ORDER BY
+            UL.receive_date DESC
+    </select>
+</mapper>

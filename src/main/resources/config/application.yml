@@ -1,0 +1,2 @@
+cron:
+  connectTask: 0 */5 * * * *

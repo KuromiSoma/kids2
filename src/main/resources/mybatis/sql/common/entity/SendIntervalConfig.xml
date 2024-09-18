@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.SendIntervalConfigMapper">
+  <sql id="selectAllColumnsFromSendIntervalConfig">
+        SELECT
+            group_id                                        AS  groupid,
+            auth_level                                      AS  authlevel,
+            day_of_week                                     AS  dayofweek,
+            config_no                                       AS  configno,
+            using_flag                                      AS  usingflag,
+            start_time                                      AS  starttime,
+            end_time                                        AS  endtime,
+            transmission_interval                           AS  transmissioninterval,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            send_interval_config
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.SendIntervalConfigEntity">
+    <include refid="selectAllColumnsFromSendIntervalConfig"></include>
+    <where>
+      <if test='groupid != null'>
+            group_id = #{groupid}
+      </if>
+      <if test='delflg != null'>
+         AND del_flg = #{delflg}
+      </if>
+    </where>
+    <if test='sort1 != null'>
+        ORDER BY
+      <choose>
+        <when test='sort1'>
+            auth_level,
+        </when>
+        <otherwise>
+            auth_level DESC,
+        </otherwise>
+      </choose>
+      <choose>
+        <when test='sort2'>
+            day_of_week,
+        </when>
+        <otherwise>
+            day_of_week DESC,
+        </otherwise>
+      </choose>
+      <choose>
+        <when test='sort3'>
+            config_no
+        </when>
+        <otherwise>
+            config_no DESC
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.SendIntervalConfigEntity">
+    <include refid="selectAllColumnsFromSendIntervalConfig"></include>
+        WHERE
+            auth_level = #{authlevel}
+        AND day_of_week = #{dayofweek}
+        AND config_no = #{configno}
+        ANd group_id = #{groupid}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.SendIntervalConfigEntity">
+        INSERT INTO
+            send_interval_config
+        (
+            group_id,
+            auth_level,
+            day_of_week,
+            config_no,
+            using_flag,
+            start_time,
+            end_time,
+            transmission_interval,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.groupid},
+            #{rec.authlevel},
+            #{rec.dayofweek},
+            #{rec.configno},
+            #{rec.usingflag},
+            #{rec.starttime},
+            #{rec.endtime},
+            #{rec.transmissioninterval},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+
+  <insert id="upsert" parameterType="com.kdc.common.entity.db.SendIntervalConfigEntity">
+        INSERT INTO
+            send_interval_config
+        (
+            group_id,
+            auth_level,
+            day_of_week,
+            config_no,
+            using_flag,
+            start_time,
+            end_time,
+            transmission_interval,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.groupid},
+            #{rec.authlevel},
+            #{rec.dayofweek},
+            #{rec.configno},
+            #{rec.usingflag},
+            #{rec.starttime},
+            #{rec.endtime},
+            #{rec.transmissioninterval},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+        ON CONFLICT
+        ON CONSTRAINT send_interval_config_pk
+        DO UPDATE
+        SET
+            using_flag = #{rec.usingflag},
+            start_time = #{rec.starttime},
+            end_time = #{rec.endtime},
+            transmission_interval = #{rec.transmissioninterval},
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+  </insert>
+</mapper>

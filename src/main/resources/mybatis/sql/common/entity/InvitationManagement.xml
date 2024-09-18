@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.InvitationManagementMapper">
+  <sql id="selectAllColumnsFromInvitationManagement">
+        SELECT
+            invitation_code                                 AS  invitationcode,
+            owner_user_id                                   AS  owneruserid,
+            guest_user_id                                   AS  guestuserid,
+            guest_telephone_number                          AS  guesttelephonenumber,
+            group_id                                        AS  groupid,
+            auth_level                                      AS  authlevel,
+            expiration_date                                 AS  expirationdate,
+            used_flg                                        AS  usedflg,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            invitation_management
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.InvitationManagementEntity">
+    <include refid="selectAllColumnsFromInvitationManagement"></include>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.InvitationManagementEntity">
+    <include refid="selectAllColumnsFromInvitationManagement"></include>
+        WHERE
+            invitation_code = #{invitationcode}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+    
+  <select id="selectValidCode" resultType="com.kdc.common.entity.db.InvitationManagementEntity">
+    <include refid="selectAllColumnsFromInvitationManagement"></include>
+        WHERE
+            used_flg = 0
+        AND del_flg = 0
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.InvitationManagementEntity">
+        INSERT INTO
+            invitation_management
+        (
+            invitation_code,
+            owner_user_id,
+            guest_user_id,
+            group_id,
+            auth_level,
+            expiration_date,
+            used_flg,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.invitationcode},
+            #{rec.owneruserid},
+            #{rec.guestuserid},
+            #{rec.groupid},
+            #{rec.authlevel},
+            #{rec.expirationdate},
+            0,
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+</mapper>

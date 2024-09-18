@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.UserDeviceMapper">
+  <sql id="selectAllColumnsFromUserDevice">
+        SELECT
+            user_id                                         AS  userid,
+            telephone_number                                AS  telephonenumber,
+            device_id                                       AS  deviceid,
+            token_id                                        AS  tokenid,
+            config_sync_date                                AS  configsyncdate,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            user_device
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.UserDeviceEntity">
+    <include refid="selectAllColumnsFromUserDevice"></include>
+    <where>
+      <if test='delflg != null'>
+            del_flg = #{delflg}
+      </if>
+    </where>
+    <if test='sort != null'>
+        ORDER BY
+      <choose>
+        <when test='sort'>
+            user_id
+        </when>
+        <otherwise>
+            user_id DESC
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.UserDeviceEntity">
+    <include refid="selectAllColumnsFromUserDevice"></include>
+        WHERE
+            user_id = #{userid}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <select id="selectDevice" resultType="com.kdc.common.entity.db.UserDeviceEntity">
+    <include refid="selectAllColumnsFromUserDevice"></include>
+        WHERE
+            telephone_number = #{telephonenumber}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <select id="selectDeviceExist" resultType="com.kdc.common.entity.db.UserDeviceEntity">
+    <include refid="selectAllColumnsFromUserDevice"></include>
+        WHERE
+              telephone_number = #{telephonenumber}
+          AND user_id != #{userid}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <select id="selectUserExist" resultType="com.kdc.common.entity.db.UserDeviceEntity">
+    <include refid="selectAllColumnsFromUserDevice"></include>
+        WHERE
+               user_id = #{userid}
+          AND  device_id is not null 
+          AND  device_id != #{deviceid}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.UserDeviceEntity">
+        INSERT INTO
+            user_device
+        (
+            user_id,
+            telephone_number,
+            device_id,
+            token_id,
+            config_sync_date,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.userid},
+            #{rec.telephonenumber},
+            #{rec.deviceid},
+            #{rec.tokenid},
+            NULL,
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+
+  <update id="update" parameterType="com.kdc.common.entity.db.UserDeviceEntity">
+        UPDATE
+            user_device
+        SET
+            telephone_number = #{rec.telephonenumber},
+            device_id = #{rec.deviceid},
+            token_id = #{rec.tokenid},
+            config_sync_date = NULL,
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+        WHERE
+            user_id = #{rec.userid}
+  </update>
+
+  <update id="deleteDevice" parameterType="com.kdc.common.entity.db.UserDeviceEntity">
+        UPDATE
+            user_device
+        SET
+            telephone_number = NULL,
+            device_id = NULL,
+            token_id = NULL,
+            config_sync_date = NULL,
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+        WHERE
+            telephone_number = #{rec.telephonenumber}
+  </update>
+</mapper>

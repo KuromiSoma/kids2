@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.api.GetGroupsMapper">
+    <select id="getGroupList" resultType="com.kdc.common.entity.db.GroupInfoEntity">
+        SELECT
+            group_id                                        AS  groupid,
+            group_name                                      AS  groupname,
+            config_param1                                   AS  configparam1,
+            config_param2                                   AS  configparam2,
+            config_param3                                   AS  configparam3,
+            config_param4                                   AS  configparam4,
+            config_param5                                   AS  configparam5,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            group_master
+        ORDER BY
+            TO_NUMBER(group_id,'00000')
+    </select>
+</mapper>

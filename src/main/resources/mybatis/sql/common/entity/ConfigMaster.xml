@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.ConfigMasterMapper">
+  <sql id="selectAllColumnsFromConfigMaster">
+        SELECT
+            group_id                                        AS  groupid,
+            config_id                                       AS  configid,
+            config_code                                     AS  configcode,
+            config_name                                     AS  configname,
+            config_param1                                   AS  configparam1,
+            config_param2                                   AS  configparam2,
+            config_param3                                   AS  configparam3,
+            config_param4                                   AS  configparam4,
+            config_param5                                   AS  configparam5,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            config_master
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.ConfigMasterEntity">
+    <include refid="selectAllColumnsFromConfigMaster"></include>
+    <where>
+     		group_id = #{groupid}
+      <if test='delflg != null'>
+        AND del_flg = #{delflg}
+      </if>
+    </where>
+    <if test='sort1 != null'>
+        ORDER BY
+      <choose>
+        <when test='sort1'>
+            config_id,
+        </when>
+        <otherwise>
+            config_id DESC,
+        </otherwise>
+      </choose>
+      <choose>
+        <when test='sort2'>
+            config_code
+        </when>
+        <otherwise>
+            config_code DESC
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.ConfigMasterEntity">
+    <include refid="selectAllColumnsFromConfigMaster"></include>
+        WHERE
+            config_id = #{configid}
+        AND config_code = #{configcode}
+     	AND group_id = #{groupid}
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <select id="selectCodeList" resultType="com.kdc.common.entity.db.ConfigMasterEntity">
+    <include refid="selectAllColumnsFromConfigMaster"></include>
+        WHERE
+            del_flg = 0
+        AND config_id = #{configid}
+     	AND group_id = #{groupid}
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.ConfigMasterEntity">
+        INSERT INTO
+            config_master
+        (
+            group_id,
+            config_id,
+            config_code,
+            config_name,
+            config_param1,
+            config_param2,
+            config_param3,
+            config_param4,
+            config_param5,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.groupid},
+            #{rec.configid},
+            #{rec.configcode},
+            #{rec.configname},
+            #{rec.configparam1},
+            #{rec.configparam2},
+            #{rec.configparam3},
+            #{rec.configparam4},
+            #{rec.configparam5},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+
+  <update id="update" parameterType="com.kdc.common.entity.db.ConfigMasterEntity">
+        UPDATE
+            config_master
+        SET
+            config_param1 = #{rec.configparam1},
+            config_param2 = #{rec.configparam2},
+            config_param3 = #{rec.configparam3},
+            config_param4 = #{rec.configparam4},
+            config_param5 = #{rec.configparam5},
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+        WHERE
+            config_id = #{rec.configid}
+        AND config_code = #{rec.configcode}
+        AND group_id = #{rec.groupid}
+  </update>
+</mapper>

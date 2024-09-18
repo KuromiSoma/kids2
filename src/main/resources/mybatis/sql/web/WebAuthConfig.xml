@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.web.WebAuthConfigMapper">
+  <select id="selectUserAlertConfig" resultType="com.kdc.common.entity.db.UserAlertConfigEntity">
+    <include refid="com.kdc.mybatis.mapper.common.entity.UserAlertConfigMapper.selectAllColumnsFromUserAlertConfig"></include>
+        WHERE
+            notification_auth_level = #{notificationauthlevel}
+        AND group_id = #{groupid}
+        AND del_flg = 0
+        ORDER BY
+            auth_level
+  </select>
+
+  <select id="selectPlaceDispConfig" resultType="com.kdc.web.webauthconfig.PlaceDispConfig">
+        SELECT
+            #{authlevel}                                    AS  authlevel,
+            M.place_id                                      AS  placeid,
+            M.place_name                                    AS  placename,
+            COALESCE(C.place_disp_flg, 0) != 0              AS  placedispflg
+        FROM
+            place_master M
+        LEFT JOIN
+            place_display_config C
+        ON  M.place_id = C.place_id            
+        AND C.del_flg = 0
+        AND C.auth_level = #{authlevel}
+        WHERE
+            M.del_flg = 0
+        AND M.group_id = #{groupid}
+        ORDER BY
+            M.place_id
+  </select>
+
+  <select id="selectPlaceAlertConfig" resultType="com.kdc.web.webauthconfig.PlaceAlertConfigSub">
+        SELECT
+            #{notificationauthlevel}                        AS  authlevel,
+            M.place_id                                      AS  placeid,
+            M.place_name                                    AS  placename,
+            C.place_id                                      AS  placeid,
+            COALESCE(C.place_alert_flg, 0) != 0             AS  placealertflg,
+            C.place_notification                            AS  placenotification,
+            COALESCE(C.place_popup, 0) != 0                 AS  placepopup,
+            C.place_alarm_time                              AS  placealarmtime,
+            C.place_vibration_time                          AS  placevibrationtime
+        FROM
+            place_master M
+        LEFT JOIN
+            place_alert_config C
+        ON  M.place_id = C.place_id            
+        AND C.del_flg = 0
+        AND C.auth_level = #{authlevel}
+        AND C.notification_auth_level = #{notificationauthlevel}
+        WHERE
+            M.del_flg = 0
+        AND M.group_id = #{groupid}
+        ORDER BY
+            M.place_id
+  </select>
+
+  <select id="selectTransmissionConfig" resultType="com.kdc.common.entity.db.SendIntervalConfigEntity">
+    <include refid="com.kdc.mybatis.mapper.common.entity.SendIntervalConfigMapper.selectAllColumnsFromSendIntervalConfig"></include>
+        WHERE
+            auth_level = #{authlevel}
+        AND group_id = #{groupid}
+        AND del_flg = 0
+        ORDER BY
+            day_of_week,
+            config_no
+  </select>
+
+  <select id="selectAllUser" resultType="com.kdc.mybatis.domain.web.webauthconfig.UserInfoDomain">
+        SELECT
+            UM.user_id                                      AS  userid,
+            UM.user_name                                    AS  username,
+            UM.auth_level                                   AS  authlevel,
+            UD.telephone_number                             AS  telephonenumber
+
+        FROM
+            user_master             UM
+        LEFT JOIN
+            user_device             UD
+        ON
+            UM.user_id = UD.user_id
+        AND UD.del_flg = 0
+        WHERE
+             UM.del_flg = 0
+         AND UM.group_id = #{groupid}
+        ORDER BY
+            UM.disp_order,
+            UM.update_date
+  </select>
+
+  <insert id="upsertUserDisp" parameterType="com.kdc.common.entity.db.UserAlertConfigEntity">
+        INSERT INTO
+            user_alert_config
+        (
+            group_id,
+            auth_level,
+            notification_auth_level,
+            location_display_flg,
+            moving_distance_display_flg,
+            battery_level_display_flg,
+            access_time_display_flg,
+            reception_status_display_flg,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.groupid},
+            #{rec.authlevel},
+            #{rec.notificationauthlevel},
+            #{rec.locationdisplayflg},
+            #{rec.movingdistancedisplayflg},
+            #{rec.batteryleveldisplayflg},
+            #{rec.accesstimedisplayflg},
+            #{rec.receptionstatusdisplayflg},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+        ON CONFLICT
+        ON CONSTRAINT user_alert_config_pk
+        DO UPDATE
+        SET
+            location_display_flg = #{rec.locationdisplayflg},
+            moving_distance_display_flg = #{rec.movingdistancedisplayflg},
+            battery_level_display_flg = #{rec.batteryleveldisplayflg},
+            access_time_display_flg = #{rec.accesstimedisplayflg},
+            reception_status_display_flg = #{rec.receptionstatusdisplayflg},
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+  </insert>
+
+  <insert id="upsertUserAlert" parameterType="com.kdc.common.entity.db.UserAlertConfigEntity">
+        INSERT INTO
+            user_alert_config
+        (
+            group_id,
+            auth_level,
+            notification_auth_level,
+            battery_level_alert_flg,
+    <if test='rec.batterylevelalertflg == 1'>
+            battery_notification,
+            battery_popup,
+            battery_alarm_time,
+            battery_vibration_time,
+            battery_reference,
+    </if>
+            connection_alert_flg,
+    <if test='rec.connectionalertflg == 1'>
+            connection_notification,
+            connection_popup,
+            connection_alarm_time,
+            connection_vibration_time,
+    </if>
+            sos_alert_flg,
+    <if test='rec.sosalertflg == 1'>
+            sos_notification,
+            sos_popup,
+            sos_alarm_time,
+            sos_vibration_time,
+    </if>
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.groupid},
+            #{rec.authlevel},
+            #{rec.notificationauthlevel},
+            #{rec.batterylevelalertflg},
+    <if test='rec.batterylevelalertflg == 1'>
+            #{rec.batterynotification},
+            #{rec.batterypopup},
+            #{rec.batteryalarmtime},
+            #{rec.batteryvibrationtime},
+            #{rec.batteryreference},
+    </if>
+            #{rec.connectionalertflg},
+    <if test='rec.connectionalertflg == 1'>
+            #{rec.connectionnotification},
+            #{rec.connectionpopup},
+            #{rec.connectionalarmtime},
+            #{rec.connectionvibrationtime},
+    </if>
+            #{rec.sosalertflg},
+    <if test='rec.sosalertflg == 1'>
+            #{rec.sosnotification},
+            #{rec.sospopup},
+            #{rec.sosalarmtime},
+            #{rec.sosvibrationtime},
+    </if>
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+        ON CONFLICT
+        ON CONSTRAINT user_alert_config_pk
+        DO UPDATE
+        SET
+            battery_level_alert_flg = #{rec.batterylevelalertflg},
+    <if test='rec.batterylevelalertflg == 1'>
+            battery_notification = #{rec.batterynotification},
+            battery_popup = #{rec.batterypopup},
+            battery_alarm_time = #{rec.batteryalarmtime},
+            battery_vibration_time = #{rec.batteryvibrationtime},
+            battery_reference = #{rec.batteryreference},
+    </if>
+            connection_alert_flg = #{rec.connectionalertflg},
+    <if test='rec.connectionalertflg == 1'>
+            connection_notification = #{rec.connectionnotification},
+            connection_popup = #{rec.connectionpopup},
+            connection_alarm_time = #{rec.connectionalarmtime},
+            connection_vibration_time = #{rec.connectionvibrationtime},
+    </if>
+            sos_alert_flg = #{rec.sosalertflg},
+    <if test='rec.sosalertflg == 1'>
+            sos_notification = #{rec.sosnotification},
+            sos_popup = #{rec.sospopup},
+            sos_alarm_time = #{rec.sosalarmtime},
+            sos_vibration_time = #{rec.sosvibrationtime},
+    </if>
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+  </insert>
+
+  <insert id="upsertPlaceAlert" parameterType="com.kdc.common.entity.db.PlaceAlertConfigEntity">
+        INSERT INTO
+            place_alert_config
+        (
+            group_id,
+            auth_level,
+            notification_auth_level,
+            place_id,
+            place_alert_flg,
+    <if test='rec.placealertflg == 1'>
+            place_notification,
+            place_popup,
+            place_alarm_time,
+            place_vibration_time,
+    </if>
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.groupid},
+            #{rec.authlevel},
+            #{rec.notificationauthlevel},
+            #{rec.placeid},
+            #{rec.placealertflg},
+    <if test='rec.placealertflg == 1'>
+            #{rec.placenotification},
+            #{rec.placepopup},
+            #{rec.placealarmtime},
+            #{rec.placevibrationtime},
+    </if>
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+        ON CONFLICT
+        ON CONSTRAINT place_alert_config_pk
+        DO UPDATE
+        SET
+            place_alert_flg = #{rec.placealertflg},
+    <if test='rec.placealertflg == 1'>
+            place_notification = #{rec.placenotification},
+            place_popup = #{rec.placepopup},
+            place_alarm_time = #{rec.placealarmtime},
+            place_vibration_time = #{rec.placevibrationtime},
+    </if>
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+  </insert>
+</mapper>

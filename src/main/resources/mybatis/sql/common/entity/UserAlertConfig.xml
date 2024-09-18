@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdc.mybatis.mapper.common.entity.UserAlertConfigMapper">
+  <sql id="selectAllColumnsFromUserAlertConfig">
+        SELECT
+            group_id                                        AS  group_id,
+            auth_level                                      AS  authlevel,
+            notification_auth_level                         AS  notificationauthlevel,
+            location_display_flg                            AS  locationdisplayflg,
+            moving_distance_display_flg                     AS  movingdistancedisplayflg,
+            battery_level_display_flg                       AS  batteryleveldisplayflg,
+            access_time_display_flg                         AS  accesstimedisplayflg,
+            reception_status_display_flg                    AS  receptionstatusdisplayflg,
+            battery_level_alert_flg                         AS  batterylevelalertflg,
+            battery_notification                            AS  batterynotification,
+            battery_popup                                   AS  batterypopup,
+            battery_alarm_time                              AS  batteryalarmtime,
+            battery_vibration_time                          AS  batteryvibrationtime,
+            battery_reference                               AS  batteryreference,
+            connection_alert_flg                            AS  connectionalertflg,
+            connection_notification                         AS  connectionnotification,
+            connection_popup                                AS  connectionpopup,
+            connection_alarm_time                           AS  connectionalarmtime,
+            connection_vibration_time                       AS  connectionvibrationtime,
+            sos_alert_flg                                   AS  sosalertflg,
+            sos_notification                                AS  sosnotification,
+            sos_popup                                       AS  sospopup,
+            sos_alarm_time                                  AS  sosalarmtime,
+            sos_vibration_time                              AS  sosvibrationtime,
+            del_flg                                         AS  delflg,
+            register_user_id                                AS  registeruserid,
+            register_date                                   AS  registerdate,
+            update_user_id                                  AS  updateuserid,
+            update_date                                     AS  updatedate
+
+        FROM
+            user_alert_config
+  </sql>
+
+  <select id="selectAll" resultType="com.kdc.common.entity.db.UserAlertConfigEntity">
+    <include refid="selectAllColumnsFromUserAlertConfig"></include>
+    <where>
+      <if test='groupid != null'>
+            group_id = #{groupid} AND 
+      </if>
+      <if test='delflg != null'>
+            del_flg = #{delflg}
+      </if>
+    </where>
+    <if test='sort1 != null'>
+        ORDER BY
+      <choose>
+        <when test='sort1'>
+            auth_level,
+        </when>
+        <otherwise>
+            auth_level DESC,
+        </otherwise>
+      </choose>
+      <choose>
+        <when test='sort2'>
+            notification_auth_level
+        </when>
+        <otherwise>
+            notification_auth_level DESC
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="selectByPk" resultType="com.kdc.common.entity.db.UserAlertConfigEntity">
+    <include refid="selectAllColumnsFromUserAlertConfig"></include>
+        WHERE
+            auth_level = #{authlevel}
+        AND notification_auth_level = #{notificationauthlevel}
+      <if test='groupid != null'>
+        AND group_id = #{groupid}
+      </if>
+    <if test='delflg != null'>
+        AND del_flg = #{delflg}
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="com.kdc.common.entity.db.UserAlertConfigEntity">
+        INSERT INTO
+            user_alert_config
+        (
+            group_id,
+            auth_level,
+            notification_auth_level,
+            location_display_flg,
+            moving_distance_display_flg,
+            battery_level_display_flg,
+            access_time_display_flg,
+            reception_status_display_flg,
+            battery_level_alert_flg,
+            battery_notification,
+            battery_popup,
+            battery_alarm_time,
+            battery_vibration_time,
+            battery_reference,
+            connection_alert_flg,
+            connection_notification,
+            connection_popup,
+            connection_alarm_time,
+            connection_vibration_time,
+            sos_alert_flg,
+            sos_notification,
+            sos_popup,
+            sos_alarm_time,
+            sos_vibration_time,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.groupid},
+            #{rec.authlevel},
+            #{rec.notificationauthlevel},
+            #{rec.locationdisplayflg},
+            #{rec.movingdistancedisplayflg},
+            #{rec.batteryleveldisplayflg},
+            #{rec.accesstimedisplayflg},
+            #{rec.receptionstatusdisplayflg},
+            #{rec.batterylevelalertflg},
+            #{rec.batterynotification},
+            #{rec.batterypopup},
+            #{rec.batteryalarmtime},
+            #{rec.batteryvibrationtime},
+            #{rec.batteryreference},
+            #{rec.connectionalertflg},
+            #{rec.connectionnotification},
+            #{rec.connectionpopup},
+            #{rec.connectionalarmtime},
+            #{rec.connectionvibrationtime},
+            #{rec.sosalertflg},
+            #{rec.sosnotification},
+            #{rec.sospopup},
+            #{rec.sosalarmtime},
+            #{rec.sosvibrationtime},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+  </insert>
+
+  <insert id="upsert" parameterType="com.kdc.common.entity.db.UserAlertConfigEntity">
+        INSERT INTO
+            user_alert_config
+        (
+            group_id,
+            auth_level,
+            notification_auth_level,
+            location_display_flg,
+            moving_distance_display_flg,
+            battery_level_display_flg,
+            access_time_display_flg,
+            reception_status_display_flg,
+            battery_level_alert_flg,
+            battery_notification,
+            battery_popup,
+            battery_alarm_time,
+            battery_vibration_time,
+            battery_reference,
+            connection_alert_flg,
+            connection_notification,
+            connection_popup,
+            connection_alarm_time,
+            connection_vibration_time,
+            sos_alert_flg,
+            sos_notification,
+            sos_popup,
+            sos_alarm_time,
+            sos_vibration_time,
+            del_flg,
+            register_user_id,
+            register_date,
+            update_user_id,
+            update_date
+        )
+        VALUES
+        (
+            #{rec.groupidl},
+            #{rec.authlevel},
+            #{rec.notificationauthlevel},
+            #{rec.locationdisplayflg},
+            #{rec.movingdistancedisplayflg},
+            #{rec.batteryleveldisplayflg},
+            #{rec.accesstimedisplayflg},
+            #{rec.receptionstatusdisplayflg},
+            #{rec.batterylevelalertflg},
+            #{rec.batterynotification},
+            #{rec.batterypopup},
+            #{rec.batteryalarmtime},
+            #{rec.batteryvibrationtime},
+            #{rec.batteryreference},
+            #{rec.connectionalertflg},
+            #{rec.connectionnotification},
+            #{rec.connectionpopup},
+            #{rec.connectionalarmtime},
+            #{rec.connectionvibrationtime},
+            #{rec.sosalertflg},
+            #{rec.sosnotification},
+            #{rec.sospopup},
+            #{rec.sosalarmtime},
+            #{rec.sosvibrationtime},
+            0,
+            #{rec.registeruserid},
+            #{rec.registerdate},
+            #{rec.registeruserid},
+            #{rec.registerdate}
+        )
+        ON CONFLICT
+        ON CONSTRAINT user_alert_config_pk
+        DO UPDATE
+        SET
+            location_display_flg = #{rec.locationdisplayflg},
+            moving_distance_display_flg = #{rec.movingdistancedisplayflg},
+            battery_level_display_flg = #{rec.batteryleveldisplayflg},
+            access_time_display_flg = #{rec.accesstimedisplayflg},
+            reception_status_display_flg = #{rec.receptionstatusdisplayflg},
+            battery_level_alert_flg = #{rec.batterylevelalertflg},
+            battery_notification = #{rec.batterynotification},
+            battery_popup = #{rec.batterypopup},
+            battery_alarm_time = #{rec.batteryalarmtime},
+            battery_vibration_time = #{rec.batteryvibrationtime},
+            battery_reference = #{rec.batteryreference},
+            connection_alert_flg = #{rec.connectionalertflg},
+            connection_notification = #{rec.connectionnotification},
+            connection_popup = #{rec.connectionpopup},
+            connection_alarm_time = #{rec.connectionalarmtime},
+            connection_vibration_time = #{rec.connectionvibrationtime},
+            sos_alert_flg = #{rec.sosalertflg},
+            sos_notification = #{rec.sosnotification},
+            sos_popup = #{rec.sospopup},
+            sos_alarm_time = #{rec.sosalarmtime},
+            sos_vibration_time = #{rec.sosvibrationtime},
+            update_user_id = #{rec.updateuserid},
+            update_date = #{rec.updatedate}
+  </insert>
+</mapper>
