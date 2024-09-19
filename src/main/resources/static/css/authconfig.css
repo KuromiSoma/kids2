@@ -1,0 +1,447 @@
+@CHARSET "utf-8";
+
+th,td {
+	overflow:hidden;
+}
+
+/* 管理グループ選択 */
+#authGroupSelect {
+	position: relative;
+	padding: 20px 10px;
+	font-size: 20px;
+	margin-bottom: 30px;
+	border: 1px solid #325A8C;
+}
+
+#authGroupSelect::after {
+	content: "\7BA1\7406\30B0\30EB\30FC\30D7";	/* "管理グループ" */
+	position: absolute;
+	top: -14px;
+	left: 10px;
+	background: #F0F8FF;
+	font-size: 20px;
+	color: #325A8C;
+	padding: 0 10px;
+}
+
+
+/* 管理レベル選択 */
+#authLevelSelect {
+	position: relative;
+	padding: 20px 10px;
+	font-size: 20px;
+	border: 1px solid #325A8C;
+}
+
+#authLevelSelect::after {
+	content: "\7BA1\7406\30EC\30D9\30EB\FF21";	/* "管理レベルA" */
+	position: absolute;
+	top: -14px;
+	left: 10px;
+	background: #F0F8FF;
+	font-size: 20px;
+	color: #325A8C;
+	padding: 0 10px;
+}
+
+#cmbAuthLevel {
+	width: 150px;
+	margin-left: 10px;
+}
+
+#cmbAuthLevel:disabled {
+	background-color: #CCC;
+}
+
+#blockArea {
+	z-index: 2;
+	width: -webkit-calc(100% - 220px);
+	height: -webkit-calc(100% - 40px);
+	overflow: scroll;
+	position: fixed;
+	top: 40px;
+	left: 220px;
+
+}
+
+.menuButton {
+	width: 180px;
+}
+
+/* ブロック初期表示設定 */
+
+#blockArea1 {
+	display: block;
+}
+
+#blockArea2 {
+	display: none;
+}
+
+#blockArea3 {
+	display: none;
+}
+
+#blockArea4 {
+	display: none;
+}
+
+#blockArea5 {
+	display: none;
+}
+
+#blockArea6 {
+	display: none;
+}
+
+#blockArea7 {
+	display: none;
+}
+
+.errorMsg {
+	font-weight: bold;
+	color: red;
+}
+
+#blockArea1, #blockArea2, #blockArea3, #blockArea4, #blockArea5, #blockArea6, #blockArea7 {
+	padding-top: 30px;
+	margin-left: 10px;
+	position: relative;
+		/*overflow: scroll;*/
+}
+
+td, th {
+	border-collapse: collapse;
+	border: solid 1px;
+}
+
+tr, th, td {
+	box-sizing: border-box;
+}
+
+table {
+	border-collapse: collapse;
+	border-bottom: solid 1px;
+}
+
+.listUserDisp, #listUserAlertBody, #listPlaceDispColHeader, .listAuthLevelUser {
+	margin-bottom: 60px;
+}
+
+/* listUserDisp */
+.listUserDisp thead, .listUserDisp tbody {
+	display: block;
+	width:901px;
+}
+
+.listUserDisp tbody {
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+.listUserDisp th:nth-of-type(1), .listUserDisp td:nth-of-type(1) {
+	width: 150px;
+	height: 40px;
+}
+
+.listUserDisp th:nth-of-type(n+2), .listUserDisp td:nth-of-type(n+2) {
+	text-align: center;
+	width: 150px;
+	height: 40px;
+}
+
+/* listUserAlert */
+#listUserAlertHeader thead {
+	display: block;
+	width: 1320px;	/* ヘッダ部幅(150+180)+データ部幅(330*3) */
+}
+
+#listUserAlertBody tbody {
+	display: block;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 1337px;	/* ヘッダ部幅(150+180)+データ部幅(330*3)+スクロールバー幅(17) */
+	height: 600px;
+}
+
+#listUserAlertHeader th:nth-of-type(1) {
+	width: 150px;
+	height: 40px;
+}
+
+#listUserAlertHeader th:nth-of-type(2) {
+	width: 180px;
+	height: 40px;
+}
+
+#listUserAlertHeader th:nth-of-type(n+3) {
+	width: 330px;
+	height: 40px;
+}
+
+#listUserAlertBody td:nth-last-of-type(5) {
+	width : 150px;
+	height : 200px;
+}
+
+#listUserAlertBody td:nth-last-of-type(4) {
+	width : 180px;
+	height : 40px;
+}
+
+#listUserAlertBody td:nth-last-of-type(-n+3) {
+	width : 330px;
+	height : 40px;
+}
+
+/* listPlaceDisp */
+#listPlaceDispColHeader {
+	font-weight: normal;
+	box-sizing: border-box;
+	width: 150px;
+}
+
+#listPlaceDispColHeader>thead>tr>th {
+	font-weight: normal;
+	height: 40px;
+}
+
+.listPlaceDispView {
+	overflow-x: auto;
+	width: 1120px;	/* 280*4件分のみ幅を確保 */
+	position: absolute;
+	top: 30px;
+	left: 150px;
+}
+
+#listPlaceDispBody thead {
+	font-weight: bold;
+}
+
+#listPlaceDispBody {
+	width: 1960px;	/* JQueryで実際の場所項目数*280に書き換える */
+}
+
+#listPlaceDispBody th, #listPlaceDispBody td {
+	width: 280px;
+	height: 40px;
+}
+
+/* listPlaceAlert */
+#listPlaceAlertDummyHeader, #listPlaceAlertRowHeader {
+	font-weight: normal;
+	box-sizing: border-box;
+	width: 331px;
+}
+
+#listPlaceAlertDummyHeader th:nth-of-type(1) {
+	width: 150px;
+	height: 40px;
+}
+
+#listPlaceAlertDummyHeader th:nth-of-type(2) {
+	width: 180px;
+	height: 40px;
+}
+
+#listPlaceAlertRowHeader td:nth-last-of-type(2) {
+	width : 150px;
+	height : 160px;
+}
+
+#listPlaceAlertRowHeader td:nth-last-of-type(1) {
+	width : 180px;
+	height : 40px;
+}
+
+#listPlaceAlertColHeader th {
+	width: 330px;
+	height: 40px;
+}
+
+#listPlaceAlertBody td {
+	width : 330px;
+	height : 40px;
+}
+
+#listPlaceAlertRowHeader {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	height: 640px;
+	width: 331px;
+}
+
+#listPlaceAlertRowView {
+	display: block;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	height: 481px;
+}
+
+#listPlaceAlertColHeader {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	width: 2310px;	/* JQueryで実際の場所項目数*330に書き換える */
+}
+
+#listPlaceAlertColView {
+	display: block;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	width: 990px;	/* 330*3件分のみ幅を確保 */
+	height: 40px;
+	border-bottom: solid 1px;
+	position: absolute;
+	top: 171px;
+	left: 331px;
+}
+
+#listPlaceAlertBody {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	width: 2310px;	/* JQueryで実際の場所項目数*330に書き換える */
+	height: 640px;
+}
+
+#listPlaceAlertView {
+	display: block;
+	overflow-x: auto;
+	overflow-y: auto;
+	width: 1007px;	/* 330*3件分+17のみ幅を確保 */
+	height: 498px;
+	position: absolute;
+	top: 212px;
+	left: 331px;
+}
+
+.listPlaceAlertAll {
+	display: block;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	width: 1337px;	/* 330+330*3件分+17のみ幅を確保 */
+}
+
+/* listTransmission */
+.listTransmission thead, .listTransmission tbody {
+	display: block;
+	width: 1008px;
+	height:30px;
+}
+
+.listTransmission tbody {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 720px;
+}
+
+.listTransmission th:nth-of-type(1) {
+	width: 90px;
+	height:30px;
+}
+
+.listTransmission th:nth-of-type(n+2) {
+	width: 180px;
+	height:30px;
+}
+
+.listTransmission td:nth-last-of-type(11) {
+	text-align: center;
+	height: 160px;
+	width: 90px;
+}
+
+.listTransmission td:nth-last-of-type(-n+10) {
+	width: 90px;
+	height : 40px;
+	padding-left:10px;
+}
+
+/* listAuthLevelUser */
+.listAuthLevelUser {
+	border-bottom: 0;
+}
+
+.listAuthLevelUser thead, .listAuthLevelUser tbody {
+	display: block;
+}
+
+.listAuthLevelUser tbody {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 550px;
+	height: 321px;
+}
+
+.listAuthLevelUser th:nth-of-type(1), .listAuthLevelUser td:nth-of-type(1) {
+	width: 250px;
+	height: 40px;
+}
+
+.listAuthLevelUser th:nth-of-type(n+2), .listAuthLevelUser td:nth-of-type(n+2) {
+	width: 280px;
+	height: 40px;
+}
+
+.commonConfigList th:nth-of-type(1), .commonConfigList td:nth-of-type(1) {
+	width: 280px;
+	height: 40px;
+}
+
+.commonConfigList th:nth-of-type(n+2), .commonConfigList td:nth-of-type(n+2) {
+	width: 120px;
+	height: 40px;
+	padding-left:10px;
+}
+
+/* ツールチップ */
+#tTip {
+    margin-top: 30px;
+}
+
+
+.fadein {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.fadein.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.balloon-left {
+    position: absolute;
+    display: inline-block;
+    margin-left: 20px;
+    padding: 7px 10px;
+    min-height: 100px;
+    min-width: 720px;
+    line-height: 20px;
+    background: #CCFFFF;
+    box-shadow: -4px 4px 8px -1px #999999;
+}
+
+.balloon-left:before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -30px;
+    margin-top: -15px;
+    border: 15px solid transparent;
+    border-right: 15px solid #CCFFFF;
+}
+
+.balloon-left p {
+    margin: 0;
+    padding: 0;
+}
+
+.white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  width: auto;
+  max-width: 700px;
+  margin: 20px auto;
+}

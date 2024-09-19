@@ -1,0 +1,62 @@
+#confirmOverlay{
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:100000;
+}
+
+#confirmBox{
+	width:300px;
+	position:fixed;
+	left:50%;
+	top:50%;
+	margin:-100px 0 0 -150px;
+	border: 2px solid;
+	border-radius: 5px 5px 0 0;
+}
+#confirmBox h1{
+	margin: 0;
+	padding: 6px 16px;
+	font-size: 18px;
+	background-color: #58acfa;
+	border-radius: 5px 5px 0 0;
+}
+
+#confirmBox p{
+	margin: 0;
+	background-color: #fff;
+	font-size: 16px;
+	line-height: 1.4;
+	padding: 16px 16px;
+}
+
+#confirmButtons{
+	padding: 16px 0 16px;
+	text-align: center;
+	background-color: #fff;
+}
+
+#confirmBox .button{
+	display: inline-block;
+	position: relative;
+	height: 33px;
+	margin-right: 15px;
+	padding: 0 35px 0 40px;
+	text-decoration: none;
+	border: none;
+	font-weight: bold;
+}
+
+#confirmBox .button:last-child{	margin-right:0;}
+
+#confirmBox .button span{
+	position: absolute;
+	top: 0;
+	right: -5px;
+	width: 5px;
+	height: 33px;
+    font-weight: bold;
+}
+

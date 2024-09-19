@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>管理設定</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" th:href="@{/js/jquery-ui-1.11.4.custom/jquery-ui.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/core.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/authconfig.css}" />
+  <script src="/js/jquery/jquery-2.2.0.min.js" th:src="@{/js/jquery/jquery-2.2.0.min.js}"></script>
+  <script src="/js/jquery-ui-1.11.4.custom/jquery-ui.min.js" th:src="@{/js/jquery-ui-1.11.4.custom/jquery-ui.min.js}"></script>
+  <script src="/js/jquery.confirm/jquery.confirm.js" th:src="@{/js/jquery.confirm/jquery.confirm.js}"></script>
+  <script src="/js/kdc/core.js" th:src="@{/js/kdc/core.js}"></script>
+  <script src="/js/kdc/authconfig.js" th:src="@{/js/kdc/authconfig.js}"></script>
+  <style type="text/css" th:utext="${pagecss}"></style>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/magnific-popup/magnific-popup.css}" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="/js/magnific-popup/jquery.magnific-popup.js" th:src="@{/js/magnific-popup/jquery.magnific-popup.js}" ></script>
+</head>
+<body>
+  <script th:utext="${pagejs}"></script>
+  <div id="titleArea" th:text="${lblTitle}">キッズコントロール　　管理設定画面</div>
+  <div id="mainArea">
+    <form action="" method="post">
+      <div id="menuArea">
+        <div class="menuContents">
+            <div id="authGroupSelect">
+              <select th:field="${form.cmbAuthGroup}" style="margin-left:10px" >
+                <option th:each="item : ${form.cmbGroup}" th:value="${item.key}" th:selected="${form.currentGroupId == item.key}" th:text="${item.value}">管理グループ</option>
+              </select>
+              <input type="hidden" th:name="currentGroupId" th:id="currentGroupId" th:value="${form.currentGroupId}" />
+            </div>
+          <div id="authLevelSelect">
+            <select th:field="${form.cmbAuthLevel}">
+              <option th:each="item : ${authLevelEnums}" th:value="${item.code}" th:text="${item.codeLabel}">管理レベル</option>
+              <!--/*-->
+              <option value="1">1:ゲスト</option>
+              <option value="2">2:子供</option>
+              <option value="3">3:大人</option>
+              <option value="4">4:管理者</option>
+              <!--*/-->
+            </select>
+            <input type="hidden" th:name="currentAuthLevel" th:id="currentAuthLevel" th:value="${form.currentAuthLevel}" />
+          </div>
+        </div>
+        <div class="menuContents">
+          <div id="menuSelect">
+            <div class="blockButton" id="blockButton1" onclick="changeDisplayBlock('1')">端末情報</div>
+            <div class="blockButton" id="blockButton2" onclick="changeDisplayBlock('2')">ユーザ通知</div>
+            <div class="blockButton" id="blockButton3" onclick="changeDisplayBlock('3')">場所通知</div>
+            <div class="blockButton" id="blockButton4" onclick="changeDisplayBlock('4')">更新間隔</div>
+            <div class="blockButton" id="blockButton5" onclick="changeDisplayBlock('5')">所属ユーザ</div>
+            <div class="blockButton" id="blockButton6" onclick="changeDisplayBlock('6')">共通設定</div>
+          </div>
+        </div>
+        <div class="menuButton">
+          <button class="cancel" type="button" onclick="window.close();">
+            <img class="iconStyle" th:src="@{/images/icon/close.png}" src="../static/images/icon/close.png" alt="閉じる" />
+          </button>
+          <a class="open-popup-link" href="#popup"><img class="iconStyle" th:src="@{/images/icon/quesion_02.png}" src="../static/images/icon/user.png" alt="説明" /></a>
+          <button type="submit" name="action" value="doCommit" id="doCommit" class="_hidden"></button>
+          <button type="submit" name="action" value="doFinalCommit" id="doFinalCommit" class="_hidden"></button>
+          <button type="button" name="action" value="doClose" id="doClose" class="_hidden" onclick="window.close();"></button>
+        </div>
+        <div id="popup" class="white-popup mfp-hide">
+          Popup content
+        </div>
+
+      </div>
+      <div id="blockArea">
+        <div id="blockArea1">
+          <table class="listUserDisp">
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+                <th colspan="4">端末情報表示</th>
+              </tr>
+              <tr>
+                <th>管理レベルＢ</th>
+                <th>位置マーク</th>
+                <th>移動距離</th>
+                <th>バッテリー残量</th>
+                <th>アクセス時間</th>
+                <th>電波状況</th>
+              </tr>
+            </thead>
+            <tbody>
+              <th:block th:each="item,stat : ${form.userDisp}" th:object="${form.userDisp[__${stat.index}__]}">
+                <tr>
+                  <td>
+                    <span th:text="${item.authLevelLabel}"></span>
+                    <input type="hidden" th:name="${'userDisp['+stat.index+'].authLevel'}" th:value="${form.userDisp[__${stat.index}__].authLevel}" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userDisp['+stat.index+'].locationDispFlg'}" th:id="'locationDispFlg'+${stat.index}" th:checked="*{locationDispFlg}" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userDisp['+stat.index+'].movingDistanceDispFlg'}" th:id="'movingDistanceDispFlg'+${stat.index}" th:checked="*{movingDistanceDispFlg}" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userDisp['+stat.index+'].batteryLevelDispFlg'}" th:id="'batteryLevelDispFlg'+${stat.index}" th:checked="*{batteryLevelDispFlg}" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userDisp['+stat.index+'].accessTimeDispFlg'}" th:id="'accessTimeDispFlg'+${stat.index}" th:checked="*{accessTimeDispFlg}" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userDisp['+stat.index+'].receptionStatusDispFlg'}" th:id="'receptionStatusDispFlg'+${stat.index}" th:checked="*{receptionStatusDispFlg}" />
+                  </td>
+                </tr>
+              </th:block>
+            </tbody>
+          </table>
+        </div>
+        <div id="blockArea2">
+          <table class="listUserAlert" id="listUserAlertHeader">
+            <thead>
+              <tr>
+                <th>管理レベルＢ</th>
+                <th></th>
+                <th>バッテリー残量</th>
+                <th>接続状況</th>
+                <th>ＳＯＳ</th>
+              </tr>
+            </thead>
+          </table>
+          <table class="listUserAlert" id="listUserAlertBody">
+            <tbody>
+              <th:block th:each="item,stat : ${form.userAlert}" th:object="${form.userAlert[__${stat.index}__]}">
+                <tr>
+                  <td rowspan="5">
+                    <span th:text="${item.authLevelLabel}"></span>
+                    <input type="hidden" th:name="${'userAlert['+stat.index+'].authLevel'}" th:value="${form.userAlert[__${stat.index}__].authLevel}" />
+                  </td>
+                  <td>通知する</td>
+                  <td>
+                    <input type="checkbox" th:name="${'userAlert['+stat.index+'].batteryLevelAlertFlg'}" th:id="'batteryLevelAlertFlg'+${stat.index}" th:checked="*{batteryLevelAlertFlg}" th:attr="onclick='setUserAlertEditable(1,'+${stat.index}+',this.checked);'" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userAlert['+stat.index+'].connectionAlertFlg'}" th:id="'connectionAlertFlg'+${stat.index}" th:checked="*{connectionAlertFlg}" th:attr="onclick='setUserAlertEditable(2,'+${stat.index}+',this.checked);'" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userAlert['+stat.index+'].sosAlertFlg'}" th:id="'sosAlertFlg'+${stat.index}" th:checked="*{sosAlertFlg}" th:attr="onclick='setUserAlertEditable(3,'+${stat.index}+',this.checked);'" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>通知方法</td>
+                  <td>
+                    <th:block th:each="item2,stat2 : ${notificationTypeEnums}">
+                      <input type="radio" th:name="${'userAlert['+stat.index+'].batteryNotification'}" th:id="'batteryNotification'+${stat.index}+${stat2.index}" th:value="${item2.code}" th:checked="*{batteryNotification}==${item2.codeString}" th:disabled="!*{batteryLevelAlertFlg}" />
+                      <label th:for="'batteryNotification'+${stat.index}+${stat2.index}" th:text="${item2.Label}"></label>
+                    </th:block>
+                  </td>
+                  <td>
+                    <th:block th:each="item2,stat2 : ${notificationTypeEnums}">
+                      <input type="radio" th:name="${'userAlert['+stat.index+'].connectionNotification'}" th:id="'connectionNotification'+${stat.index}+${stat2.index}" th:value="${item2.code}" th:checked="*{connectionNotification}==${item2.codeString}" th:disabled="!*{connectionAlertFlg}" />
+                      <label th:for="'connectionNotification'+${stat.index}+${stat2.index}" th:text="${item2.Label}"></label>
+                    </th:block>
+                  </td>
+                  <td>
+                    <th:block th:each="item2,stat2 : ${notificationTypeEnums}">
+                      <input type="radio" th:name="${'userAlert['+stat.index+'].sosNotification'}" th:id="'sosNotification'+${stat.index}+${stat2.index}" th:value="${item2.code}" th:checked="*{sosNotification}==${item2.codeString}" th:disabled="!*{sosAlertFlg}" />
+                      <label th:for="'sosNotification'+${stat.index}+${stat2.index}" th:text="${item2.Label}"></label>
+                    </th:block>
+                  </td>
+                </tr>
+<!--
+                <tr>
+                  <td>鳴動時間</td>
+                  <td>
+                    <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'userAlert['+stat.index+'].batteryAlarmTime'}" th:id="'batteryAlarmTime'+${stat.index}" th:value="*{batteryAlarmTime}" th:disabled="!*{batteryLevelAlertFlg}" /> 秒
+                  </td>
+                  <td>
+                    <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'userAlert['+stat.index+'].connectionAlarmTime'}" th:id="'connectionAlarmTime'+${stat.index}" th:value="*{connectionAlarmTime}" th:disabled="!*{connectionAlertFlg}" /> 秒
+                  </td>
+                  <td>
+                    <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'userAlert['+stat.index+'].sosAlarmTime'}" th:id="'sosAlarmTime'+${stat.index}" th:value="*{sosAlarmTime}" th:disabled="!*{sosAlertFlg}" /> 秒
+                  </td>
+                </tr>
+-->
+                <tr>
+                  <td>バイブ時間</td>
+                  <td>
+                    <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'userAlert['+stat.index+'].batteryVibrationTime'}" th:id="'batteryVibrationTime'+${stat.index}" th:value="*{batteryVibrationTime}" th:disabled="!*{batteryLevelAlertFlg}" /> 秒
+                  </td>
+                  <td>
+                    <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'userAlert['+stat.index+'].connectionVibrationTime'}" th:id="'connectionVibrationTime'+${stat.index}" th:value="*{connectionVibrationTime}" th:disabled="!*{connectionAlertFlg}" /> 秒
+                  </td>
+                  <td>
+                    <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'userAlert['+stat.index+'].sosVibrationTime'}" th:id="'sosVibrationTime'+${stat.index}" th:value="*{sosVibrationTime}" th:disabled="!*{sosAlertFlg}" /> 秒
+                  </td>
+                </tr>
+                <tr>
+                  <td>ポップアップＯＮ</td>
+                  <td>
+                    <input type="checkbox" th:name="${'userAlert['+stat.index+'].batteryPopup'}" th:id="'batteryPopup'+${stat.index}" th:checked="*{batteryPopup}" th:disabled="!*{batteryLevelAlertFlg}" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userAlert['+stat.index+'].connectionPopup'}" th:id="'connectionPopup'+${stat.index}" th:checked="*{connectionPopup}" th:disabled="!*{connectionAlertFlg}" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'userAlert['+stat.index+'].sosPopup'}" th:id="'sosPopup'+${stat.index}" th:checked="*{sosPopup}" th:disabled="!*{sosAlertFlg}" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>バッテリー残量基準値</td>
+                  <td>
+                    <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'userAlert['+stat.index+'].batteryReference'}" th:id="'batteryReference'+${stat.index}" th:value="*{batteryReference}" th:disabled="!*{batteryLevelAlertFlg}" /> ％
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </th:block>
+            </tbody>
+          </table>
+        </div>
+        <div id="blockArea3">
+          <table class="listPlaceDisp" id="listPlaceDispColHeader">
+            <thead>
+              <tr>
+                <th></th>
+              </tr>
+              <tr>
+                <th>表示する</th>
+              </tr>
+            </thead>
+          </table>
+          <div class="listPlaceDispView">
+            <table class="listPlaceDisp" id="listPlaceDispBody">
+              <thead>
+                <tr>
+                  <th:block th:each="item,stat : ${form.places}">
+                    <td><span th:text="${item.placename}"></span></td>
+                  </th:block>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th:block th:each="item,stat : ${form.placeDisp}" th:object="${form.placeDisp[__${stat.index}__]}">
+                    <td>
+                      <input type="hidden" th:name="${'placeDisp['+stat.index+'].placeId'}" th:value="${form.places[__${stat.index}__].placeid}" />
+                      <input type="checkbox" th:name="${'placeDisp['+stat.index+'].placeDispFlg'}" th:id="'placeDispFlg'+${stat.index}" th:checked="*{placeDispFlg}" />
+                    </td>
+                  </th:block>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="listPlaceAlertAll">
+            <table class="listPlaceAlert" id="listPlaceAlertDummyHeader">
+              <thead>
+                <tr>
+                  <th>管理レベルＢ</th>
+                  <th></th>
+                </tr>
+              </thead>
+            </table>
+            <div id="listPlaceAlertRowView">
+              <table class="listPlaceAlert" id="listPlaceAlertRowHeader">
+                <tbody>
+                  <th:block th:each="item,stat : ${form.placeAlert}" >
+                    <tr>
+                      <td rowspan="4">
+                        <span th:text="${item.authLevelLabel}"></span>
+                      </td>
+                      <td>通知する</td>
+                    </tr>
+                    <tr>
+                      <td>通知方法</td>
+                    </tr>
+<!--
+                    <tr>
+                      <td>鳴動時間</td>
+                    </tr>
+-->
+                    <tr>
+                      <td>バイブ時間</td>
+                    </tr>
+                    <tr>
+                      <td>ポップアップＯＮ</td>
+                    </tr>
+                  </th:block>
+                </tbody>
+              </table>
+            </div>
+            <div id="listPlaceAlertColView">
+              <table class="listPlaceAlert" id="listPlaceAlertColHeader">
+                <thead>
+                  <tr>
+                    <th:block th:each="item,stat : ${form.places}">
+                      <th><span th:text="${item.placename}"></span></th>
+                    </th:block>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div id="listPlaceAlertView" onscroll="listPlaceAlertScroll();">
+              <table class="listPlaceAlert" id="listPlaceAlertBody">
+                <tbody>
+                  <th:block th:each="item,stat : ${form.placeAlert}">
+                    <tr>
+                      <th:block th:each="item2,stat2 : ${item.alert}" th:object="${form.placeAlert[__${stat.index}__].alert[__${stat2.index}__]}">
+                        <td>
+                          <input type="hidden" th:if="${stat2.first}" th:name="${'placeAlert['+stat.index+'].authLevel'}" th:value="${form.placeAlert[__${stat.index}__].authLevel}" />
+                          <input type="hidden" th:name="${'placeAlert['+stat.index+'].alert['+stat2.index+'].placeId'}" th:value="${form.places[__${stat2.index}__].placeid}" />
+                          <input type="checkbox" th:name="${'placeAlert['+stat.index+'].alert['+stat2.index+'].placeAlertFlg'}" th:id="'placeAlertFlg'+${stat.index}+${stat2.index}" th:checked="*{placeAlertFlg}" th:attr="onclick='setPlaceAlertEditable('+${stat.index}+','+${stat2.index}+',this.checked);'" />
+                        </td>
+                      </th:block>
+                    </tr>
+                    <tr>
+                      <th:block th:each="item2,stat2 : ${item.alert}" th:object="${form.placeAlert[__${stat.index}__].alert[__${stat2.index}__]}">
+                        <td>
+                          <th:block th:each="item3,stat3 : ${notificationTypeEnums}">
+                            <input type="radio" th:name="${'placeAlert['+stat.index+'].alert['+stat2.index+'].placeNotification'}" th:id="'placeNotification'+${stat.index}+${stat2.index}+${stat3.index}" th:value="${item3.code}" th:checked="*{placeNotification}==${item3.codeString}" th:disabled="!*{placeAlertFlg}" />
+                            <label th:for="'placeNotification'+${stat.index}+${stat2.index}+${stat3.index}" th:text="${item3.Label}"></label>
+                          </th:block>
+                        </td>
+                      </th:block>
+                    </tr>
+<!--
+                    <tr>
+                      <th:block th:each="item2,stat2 : ${item.alert}" th:object="${form.placeAlert[__${stat.index}__].alert[__${stat2.index}__]}">
+                        <td>
+                          <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'placeAlert['+stat.index+'].alert['+stat2.index+'].placeAlarmTime'}" th:id="'placeAlarmTime'+${stat.index}+${stat2.index}" th:value="*{placeAlarmTime}" th:disabled="!*{placeAlertFlg}" /> 秒
+                        </td>
+                      </th:block>
+                    </tr>
+-->
+                    <tr>
+                      <th:block th:each="item2,stat2 : ${item.alert}" th:object="${form.placeAlert[__${stat.index}__].alert[__${stat2.index}__]}">
+                        <td>
+                          <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'placeAlert['+stat.index+'].alert['+stat2.index+'].placeVibrationTime'}" th:id="'placeVibrationTime'+${stat.index}+${stat2.index}" th:value="*{placeVibrationTime}" th:disabled="!*{placeAlertFlg}" /> 秒
+                        </td>
+                      </th:block>
+                    </tr>
+                    <tr>
+                      <th:block th:each="item2,stat2 : ${item.alert}" th:object="${form.placeAlert[__${stat.index}__].alert[__${stat2.index}__]}">
+                        <td>
+                          <input type="checkbox" th:name="${'placeAlert['+stat.index+'].alert['+stat2.index+'].placePopup'}" th:id="'placePopup'+${stat.index}+${stat2.index}" th:checked="*{placePopup}" th:disabled="!*{placeAlertFlg}" />
+                        </td>
+                      </th:block>
+                    </tr>
+                  </th:block>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="blockArea4">
+          <table class="listTransmission">
+            <thead>
+              <tr>
+                <th>管理ﾚﾍﾞﾙB</th>
+                <th colspan="2">設定１</th>
+                <th colspan="2">設定２</th>
+                <th colspan="2">設定３</th>
+                <th colspan="2">設定４</th>
+                <th colspan="2">設定５</th>
+              </tr>
+            </thead>
+            <tbody>
+              <th:block th:each="item,stat : ${form.trans}">
+                <tr>
+                  <td rowspan="4">
+                    <span th:text="${item.dayOfWeekLabel}"></span>
+                    <input type="hidden" th:name="${'trans['+stat.index+'].dayOfWeek'}" th:value="${form.trans[__${stat.index}__].dayOfWeek}" />
+                  </td>
+                </tr>
+                <tr>
+                  <th:block th:each="item2,stat2 : ${item.sub}" th:object="${form.trans[__${stat.index}__].sub[__${stat2.index}__]}">
+                    <td>開始</td>
+                    <td>
+                      <input type="hidden" th:name="${'trans['+stat.index+'].sub['+stat2.index+'].configNo'}" th:value="*{configNo}" />
+                      <input type="text" class="numText _attributeTime" size="5" maxlength="5" th:name="${'trans['+stat.index+'].sub['+stat2.index+'].startTime'}" th:id="'startTime'+${stat.index}+${stat2.index}" th:value="*{startTime}" />
+                    </td>
+                  </th:block>
+                </tr>
+                <tr>
+                  <th:block th:each="item2,stat2 : ${item.sub}" th:object="${form.trans[__${stat.index}__].sub[__${stat2.index}__]}">
+                    <td>終了</td>
+                    <td>
+                      <input type="text" class="numText _attributeTime" size="5" maxlength="5" th:name="${'trans['+stat.index+'].sub['+stat2.index+'].endTime'}" th:id="'endTime'+${stat.index}+${stat2.index}" th:value="*{endTime}" />
+                    </td>
+                  </th:block>
+                </tr>
+                <tr>
+                  <th:block th:each="item2,stat2 : ${item.sub}" th:object="${form.trans[__${stat.index}__].sub[__${stat2.index}__]}">
+                    <td>間隔(分)</td>
+                    <td>
+                      <input type="text" class="numText _attributeNum" size="3" maxlength="3" th:name="${'trans['+stat.index+'].sub['+stat2.index+'].transmissionInterval'}" th:id="'transmissionInterval'+${stat.index}+${stat2.index}" th:value="*{transmissionInterval}" />
+                    </td>
+                  </th:block>
+                </tr>
+              </th:block>
+            </tbody>
+          </table>
+        </div>
+        <div id="blockArea5">
+          <table id="tblThisLevelUser" class="listAuthLevelUser">
+            <thead>
+              <tr>
+                <th>所属ユーザ</th>
+                <th>電話番号</th>
+              </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+              <th:block th:utext="${tblThisLevelUserBody}">
+              <th:block th:each="item,stat : ${form.thisLevelUser}" th:object="${form.thisLevelUser[__${stat.index}__]}">
+                <tr>
+                  <td>
+                    <span>ＮＮＮＮＮＮＮＮＮＮＮＮＮＮＮ</span>
+                    <input type="hidden" th:name="${'thisLevelUser['+stat.index+'].userId'}" th:value="*{userId}" />
+                  </td>
+                  <td></td>
+                </tr>
+              </th:block>
+              </th:block>
+            </tbody>
+          </table>
+          <br />
+          <table id="tblOtherLevelUser" class="listAuthLevelUser">
+            <thead>
+              <tr>
+                <th>その他ユーザ</th>
+                <th>管理レベル設定</th>
+              </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+              <th:block th:utext="${tblOtherLevelUserBody}">
+              <th:block th:each="item,stat : ${form.otherLevelUser}" th:object="${form.otherLevelUser[__${stat.index}__]}">
+                <tr>
+                  <td>
+                    <span>ＮＮＮＮＮＮＮＮＮＮＮＮＮＮＮ</span>
+                    <input type="hidden" th:name="${'otherLevelUser['+stat.index+'].userId'}" th:value="*{userId}" />
+                  </td>
+                  <td>
+                    <input type="checkbox" th:name="${'otherLevelUser['+stat.index+'].authCheck'}" th:id="'authCheck'+${stat.index}" th:value="*{userId}" th:checked="*{authCheck}" />
+                  </td>
+                </tr>
+              </th:block>
+              </th:block>
+            </tbody>
+          </table>
+        </div>
+        <div id="blockArea6">
+          <table class="commonConfigList">
+            <tr>
+              <td>ＳＯＳカウントダウン秒数</td>
+              <td><input type="text" class="numText _attributeNum" size="3" maxlength="3" th:id="sosCountdown" th:name="sosCountdown" th:value="${form.sosCountdown}" /> 秒</td>
+            </tr>
+            <tr>
+              <td>端末切断時間</td>
+              <td><input type="text" class="numText _attributeNum" size="3" maxlength="3" th:id="disconnectTime" th:name="disconnectTime" th:value="${form.disconnectTime}" /> 分</td>
+            </tr>
+            <tr>
+              <td>グループ名</td>
+              <td><input type="text" size="15" maxlength="15" th:id="groupName" th:name="groupName" th:value="${form.groupName}" onChange='changeGroupName()'/> </td>
+              <input type="hidden" th:name="newGroupName" th:id="newGroupName" th:value="${form.newGroupName}"  />
+            </tr>
+          </table>
+        </div>
+	    <div id="balloon-tips" class="balloon-left fadein">
+	      <p id="toolTipMsg" ></p>
+	    </div>
+      </div>
+      <input type="hidden" id="dispBlock" name="dispBlock" value="" th:value="${form.dispBlock}" />
+      <input type="hidden" id="nextDispBlock" name="nextDispBlock" value="" th:value="${form.nextDispBlock}" />
+      <input type="hidden" id="placeCount" name="placeCount" value="" th:value="${form.placeCount}" />
+      <input type="hidden" id="loginId" name="loginId" value="" th:value="${form.loginId}" />
+    </form>
+  </div>
+</body>
+</html>

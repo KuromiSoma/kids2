@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>サンプル画面</title>
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data" >
+<!-- formの「enctype="multipart/form-data" 」はファイルを扱う場合のみ必要 -->
+<br/>ラベル(span)<br/>
+<span data-th-text="${form.labeldata}">SampleForm.textinfoを表示</span>
+<br/>隠し項目(input)<br/>
+<input type="hidden" id="hdndata" name="hdndata" value="" data-th-value="${form.hdndata}" />
+<br/>テキストボックス(input)<br/>
+<input type="text" id="textdata" name="textdata" value="" data-th-value="${form.textdata}" />
+<br/>コンボボックス(input)<br/>
+<select id="cmbNendo" name="cmbNendo" class="_attributeSelect">
+  <option data-th-each="item : ${cmbNendo}" data-th-value="${item.key}" data-th-selected="${item.key == form.cmbdata}" data-th-text="${item.value}"></option>
+</select>
+<br/>チェックボックス(input)<br/>
+<input type="checkbox" id="chkdata1" name="chkdata1" value="1" data-th-checked="${form.chkdata1}" /><label for="chkdata1">チェック１</label>
+<input type="checkbox" id="chkdata2" name="chkdata2" value="1" data-th-checked="${form.chkdata2}" /><label for="chkdata2">チェック２</label>
+<br/>ラジオボタン(input)<br/>
+<input type="radio" id="optdata1" name="optdata" value="1" data-th-checked="${form.optdata == '1'}"/><label for="optdata1">あり</label>
+<input type="radio" id="optdata2" name="optdata" value="0" data-th-checked="${form.optdata == '0'}"/><label for="optdata2">なし</label>
+<br/>ファイル(input)<br/>
+<input id="fileData" name="fileData" type="file" style="width:50em" />
+<br/>submit<br/>
+<button type="submit" name="action" value="doCommit" id="doCommit" >実行</button>
+<button type="submit" name="action" value="doCancel" id="doCancel" >取消</button>
+</form>
+</body>
+</html>

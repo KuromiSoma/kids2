@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>ユーザ設定</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" th:href="@{/js/jquery-ui-1.11.4.custom/jquery-ui.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/userconfig.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/core.css}" />
+  <script src="/js/jquery/jquery-2.2.0.min.js" th:src="@{/js/jquery/jquery-2.2.0.min.js}"></script>
+  <script src="/js/jquery-ui-1.11.4.custom/jquery-ui.min.js" th:src="@{/js/jquery-ui-1.11.4.custom/jquery-ui.min.js}"></script>
+  <script src="/js/kdc/core.js" th:src="@{/js/kdc/core.js}"></script>
+  <script src="/js/kdc/userconfig.js" th:src="@{/js/kdc/userconfig.js}"></script>
+  <style type="text/css" th:utext="${pagecss}"></style>
+</head>
+<body>
+  <script th:utext="${pagejs}"></script>
+  <div id="mainArea">
+    <form action="" method="post" enctype="multipart/form-data">
+      <div id="titleArea">キッズコントロール ユーザ設定画面</div>
+      <div id="menuArea">
+        <div class="userSelect">
+          <div id="userDiv">
+            <select th:field="${form.cmbUser}">
+              <option th:each="item : ${cmbUser}" th:value="${item.key}" th:text="${item.value}"></option>
+            </select>
+            <button type="submit" name="action" value="changeUser" id="changeUser" class="_hidden"></button>
+          </div>
+        </div>
+        <div class="menuButton">
+          <button class="toroku" type="submit" name="action" value="doCommit" id="doCommit">
+            <img class="iconStyle" src="../static/images/icon/register.png" th:attr="src=@{/images/icon/register.png}" alt="登録" />
+          </button>
+          <button class="cancel" type="button" onclick="window.close()">
+            <img class="iconStyle" src="../static/images/icon/cancel.png" th:attr="src=@{/images/icon/cancel.png}" alt="閉じる" />
+          </button>
+        </div>
+      </div>
+      <div id="block5">
+        <table class="list7">
+          <tr>
+            <th>ユーザ名</th>
+            <td><input type="text" class="setleft" size="60" maxlength="30" id="userName" name="userName" value="" th:value="${form.userName}" /></td>
+          </tr>
+          <tr>
+            <th>パスワード</th>
+            <td><input type="text" class="setleft" size="60" maxlength="30" id="password" name="password" value="" th:value="${form.password}" /></td>
+          </tr>
+          <tr>
+            <th class="high">アイコン画像</th>
+            <td>
+              <div class="iconDiv" align="center">
+                <img id="iconPreview" src="" width="80px" height="80px" alt="画像" th:src="${form.iconDataString}" />
+              </div>
+              <input type="file" accept="image/*" size="50" id="iconImg" name="iconImg" th:value="${form.iconImg}" />
+              <button type="button" name="action" value="changeIcon" id="changeIcon" class="_hidden"></button>
+            </td>
+          </tr>
+          <tr class="hidden">
+            <th>グループＩＤ</th>
+            <td><input type="text" size="13" maxlength="30" id="groupId" name="groupId" value="" th:value="${form.groupId}" /></td>
+          </tr>
+          <tr>
+            <th>管理レベル</th>
+            <td>
+              <th:block th:each="authItem : ${authLebels}">
+                <input type="radio" th:field="${form.authLevel}" th:value="${authItem.key}" />
+                <label th:for="${'authLevel'+authItem.key}" th:text="${authItem.value}"></label>
+              </th:block>
+            </td>
+          </tr>
+          <tr>
+            <th class="high">ライン表示色</th>
+            <td>
+              <div class="leftDiv">
+                <div id="lineColorDiv">
+                  <input type="color" name="lineColor" th:value="${form.lineColor}" id="lineColor" onchange="changeLineColor()"></input>
+                  <input type="hidden" id="lineColorAlpha" name="lineColorAlpha" value="" th:value="${form.lineColorAlpha}" />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="high">マーカー表示色</th>
+            <td>
+              <th:block th:each="markerColor,stat : ${markerColors}">
+                <input type="radio" th:field="${form.markerColor}" th:value="${stat.count}" />
+                <label th:for="${'markerColor'+stat.count}">
+                  <img width="64px" height="64px" alt="マーカー" th:src="${markerColor.value}" />
+                </label>
+                <br th:if="${stat.count % 5 == 0}" />
+              </th:block>
+            </td>
+          </tr>
+          <tr>
+            <th>ユーザ削除</th>
+            <td>
+              <button type="button" id="deleteUser" onclick='doDeleteUser()'>このユーザを削除する</button>
+              <button type="submit" name="action" value="doDelete" id="doDelete" class="_hidden" ></button>
+              <div id="deleteUserDialog"></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <input type="hidden" id="userId" name="userId" value="" th:value="${form.userId}" />
+      <input type="hidden" id="selectedUser" name="selectedUser" value="" th:value="${form.selectedUser}" />
+      <input type="hidden" id="selectedUserId" name="selectedUserId" value="" th:value="${form.selectedUserId}" />
+      <input type="hidden" id="selectedIconDataString" name="selectedIconDataString" value="" th:value="${form.selectedIconDataString}" />
+      <input type="hidden" id="loginId" name="loginId" value="" th:value="${form.loginId}" />
+    </form>
+  </div>
+</body>
+</html>
