@@ -1,4 +1,4 @@
-package com.kdc.web.weblogin;
+package com.kdc.web.login;
 
 import jakarta.servlet.http.HttpSession;
 

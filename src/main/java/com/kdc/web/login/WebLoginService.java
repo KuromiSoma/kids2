@@ -1,4 +1,4 @@
-package com.kdc.web.weblogin;
+package com.kdc.web.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

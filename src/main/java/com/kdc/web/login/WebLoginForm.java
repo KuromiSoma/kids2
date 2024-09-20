@@ -1,4 +1,4 @@
-package com.kdc.web.weblogin;
+package com.kdc.web.login;
 
 public class WebLoginForm {
 

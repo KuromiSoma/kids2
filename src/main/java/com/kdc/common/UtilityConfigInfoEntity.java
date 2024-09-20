@@ -1,4 +1,4 @@
-package com.kdc.common.entity.api;
+package com.kdc.common;
 
 public class UtilityConfigInfoEntity {
 

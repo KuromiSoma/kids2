@@ -370,12 +370,12 @@ google.maps.event.addDomListener(window, 'load', function() {
 			rmenu.style.left = scrX + 30 + "px";
 			rmenu.style.zIndex = "3";
 			// 右クリックメニューの内容(HTML）
-			rmenu.innerHTML = "<div class="menuRirekiDiv">"
-					+ "<button type="button" value="menuRireki" id="menuRireki" class="menuButtonMain" onclick="menuRirekiOpen()">バッテリー・移動履歴</button>"
-					+ "<button type="submit" name="action" value="menuRireki" id="menuRirekiSub" class="_hidden"></button></div>"
-					+ "<div class="menuUserDiv">"
-					+ "<button type="button" value="menuUser" id="menuUser" class="menuButtonMain" onclick="menuUserOpen()">ユーザ設定</button>"
-					+ "<button type="submit" name="action" value="menuUser" id="menuUserSub" class="_hidden"></button></div>";
+			rmenu.innerHTML = "<div class='menuRirekiDiv'>"
+					+ "<button type='button' value='menuRireki' id='menuRireki' class='menuButtonMain' onclick='menuRirekiOpen()'>バッテリー・移動履歴</button>"
+					+ "<button type='submit' name='action' value='menuRireki' id='menuRirekiSub' class='_hidden' ></button></div>"
+					+ "<div class='menuUserDiv'>"
+					+ "<button type='button' value='menuUser' id='menuUser' class='menuButtonMain' onclick='menuUserOpen()'>ユーザ設定</button>"
+					+ "<button type='submit' name='action' value='menuUser' id='menuUserSub' class='_hidden' ></button></div>";
 			// 右クリックメニューをmap内に返す
 			document.getElementsByTagName("form").item(0).appendChild(rmenu);
 		});
@@ -521,7 +521,7 @@ function menuRirekiOpen() {
 	var selectIndex = document.getElementById('selectUserIndex').value;
 	var userIdList = document.getElementById('userIdList').value.split(';');
 
-	window.open("./record?loginId=" + $('#loginId').val() + "&selectUserId=" + userIdList[selectIndex] + "&zoomLevel=" + map.getZoom() + "¢erLat=" + map.getCenter().lat() + "¢erLng=" + map.getCenter().lng(), "_blank");
+	window.open("./record?loginId=" + $('#loginId').val() + "&selectUserId=" + userIdList[selectIndex] + "&zoomLevel=" + map.getZoom() + "&centerLat=" + map.getCenter().lat() + "&centerLng=" + map.getCenter().lng(), "_blank");
 }
 
 function menuUserOpen() {
@@ -538,7 +538,7 @@ function authConfigOpen() {
 }
 
 function placeconfigOpen() {
-	window.open("./placeconfig?loginId=" + $('#loginId').val() + "&zoomLevel=" + map.getZoom() + "¢erLat=" + map.getCenter().lat() + "¢erLng=" + map.getCenter().lng() + "&groupid=" + $('#currentGroupId').val(), "_blank");
+	window.open("./placeconfig?loginId=" + $('#loginId').val() + "&zoomLevel=" + map.getZoom() + "&centerLat=" + map.getCenter().lat() + "&centerLng=" + map.getCenter().lng() + "&groupid=" + $('#currentGroupId').val(), "_blank");
 }
 
 function changeDispLines() {
