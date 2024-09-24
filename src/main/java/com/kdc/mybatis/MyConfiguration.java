@@ -27,7 +27,7 @@ public class MyConfiguration {
 		//dataSource.setUrl("jdbc:postgresql://172.30.20.110:5432/hibikidb");
 		//dataSource.setUrl("jdbc:postgresql://172.30.20.110:5432/hibikidb?currentSchema=kidcontrol_new");
 		//dataSource.setUrl("jdbc:postgresql://10.1.1.10:5432/kidcontrol_db");
-		dataSource.setUrl("jdbc:postgresql://localhost:5555/kidcontrol_db");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/kidcontrol_db");
 		//dataSource.setUrl("jdbc:postgresql://172.30.254.2:5432/kidcontrol_db");
 		return dataSource;
 	}
