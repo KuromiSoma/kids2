@@ -15,6 +15,7 @@ public class CommonConst {
 	/** アクセスポイントURL共通部:サーバ */
 	public static final String WEB_BASE_URL = "/web";
 
+
 	/** システムモジュールファイル格納ディレクトリパス */
 	// TODO:本番環境に合わせて変更
 	public static final String SYSTEM_MODULE_PATH = "/Users/963somaformac/work/kids/Shared01/kidcontrol/module/";

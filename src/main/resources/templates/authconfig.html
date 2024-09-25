@@ -24,7 +24,7 @@
       <div id="menuArea">
         <div class="menuContents">
             <div id="authGroupSelect">
-              <select th:field="${form.cmbAuthGroup}" style="margin-left:10px" >
+                <select th:field="${form.cmbAuthGroup}" style="margin-left:10px" >
                 <option th:each="item : ${form.cmbGroup}" th:value="${item.key}" th:selected="${form.currentGroupId == item.key}" th:text="${item.value}">管理グループ</option>
               </select>
               <input type="hidden" th:name="currentGroupId" th:id="currentGroupId" th:value="${form.currentGroupId}" />
