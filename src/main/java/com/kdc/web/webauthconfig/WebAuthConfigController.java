@@ -1,7 +1,7 @@
 package com.kdc.web.webauthconfig;
 
 import java.util.List;
-
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +15,6 @@ import com.kdc.common.enums.NotificationTypeEnum;
 import com.kdc.common.enums.WebPageEnum;
 import com.kdc.common.util.CommonConst;
 import com.kdc.web.base.MasterPageController;
-
-import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理レベル設定画面 Controller クラス

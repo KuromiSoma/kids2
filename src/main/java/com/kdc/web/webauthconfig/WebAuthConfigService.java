@@ -108,6 +108,7 @@ public class WebAuthConfigService {
 		form.setCmbGroup(groupMap);
 		form.setGroupName(groupMap.get(form.getCmbAuthGroup()));
 		form.setNewGroupName(groupMap.get(form.getCmbAuthGroup()));
+		form.setCurrentGroupId("1");
 
 
 		return;
